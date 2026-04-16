@@ -86,7 +86,8 @@ body { background:var(--bg); color:var(--text); font-family:var(--sans); font-si
   cursor:pointer; transition:all .15s; user-select:none;
 }
 .theme-chip:hover { border-color:var(--red); background:var(--red2); }
-.theme-chip.selected { border-color:var(--red); background:var(--red2); }
+.theme-chip.selected { border-color:var(--red); background:var(--red2); box-shadow:0 0 0 2px rgba(237,25,58,.2); }
+.theme-chip.selected .theme-chip-text { color:var(--red); font-weight:600; }
 .theme-chip input { display:none; }
 .theme-chip-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; margin-top:4px; }
 .theme-chip-text { font-size:.78rem; font-weight:500; line-height:1.4; }
@@ -198,32 +199,32 @@ body { background:var(--bg); color:var(--text); font-family:var(--sans); font-si
   <div class="field">
     <label>Strategic Themes <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:.75rem;color:var(--muted)">(select all that apply)</span></label>
     <div class="theme-grid" id="themeGrid">
-      <label class="theme-chip" onclick="toggleTheme(this)">
+      <label class="theme-chip">
         <input type="checkbox" value="consistency">
         <span class="theme-chip-dot" style="background:#ED193A;"></span>
         <div><div class="theme-chip-text">Consistency</div><div class="theme-chip-sub">Predictable pig flow & stable outputs</div></div>
       </label>
-      <label class="theme-chip" onclick="toggleTheme(this)">
+      <label class="theme-chip">
         <input type="checkbox" value="observability">
         <span class="theme-chip-dot" style="background:#1e40af;"></span>
         <div><div class="theme-chip-text">Observability</div><div class="theme-chip-sub">Real-time visibility into operations</div></div>
       </label>
-      <label class="theme-chip" onclick="toggleTheme(this)">
+      <label class="theme-chip">
         <input type="checkbox" value="connectivity">
         <span class="theme-chip-dot" style="background:#15803d;"></span>
         <div><div class="theme-chip-text">Connectivity</div><div class="theme-chip-sub">Link people, systems & processes</div></div>
       </label>
-      <label class="theme-chip" onclick="toggleTheme(this)">
+      <label class="theme-chip">
         <input type="checkbox" value="throughput">
         <span class="theme-chip-dot" style="background:#92400e;"></span>
         <div><div class="theme-chip-text">Throughput & Efficiency</div><div class="theme-chip-sub">More output, lower cost & labor</div></div>
       </label>
-      <label class="theme-chip" onclick="toggleTheme(this)">
+      <label class="theme-chip">
         <input type="checkbox" value="safety">
         <span class="theme-chip-dot" style="background:#7c3aed;"></span>
         <div><div class="theme-chip-text">Safety & Well-Being</div><div class="theme-chip-sub">Eliminate incidents, enhance animal care</div></div>
       </label>
-      <label class="theme-chip" onclick="toggleTheme(this)">
+      <label class="theme-chip">
         <input type="checkbox" value="sustainability">
         <span class="theme-chip-dot" style="background:#0369a1;"></span>
         <div><div class="theme-chip-text">Sustainability & Traceability</div><div class="theme-chip-sub">Reduce resource use & strengthen transparency</div></div>
@@ -320,10 +321,27 @@ function showForm() {
 }
 
 /* ── THEME TOGGLE ── */
+document.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.theme-chip input').forEach(cb => {
+    cb.addEventListener('change', () => {
+      cb.closest('.theme-chip').classList.toggle('selected', cb.checked);
+    });
+  });
+  // Make entire chip clickable
+  document.querySelectorAll('.theme-chip').forEach(chip => {
+    chip.addEventListener('click', (e) => {
+      if (e.target.tagName === 'INPUT') return;
+      const cb = chip.querySelector('input');
+      cb.checked = !cb.checked;
+      chip.classList.toggle('selected', cb.checked);
+    });
+  });
+});
+
 function toggleTheme(label) {
-  label.classList.toggle('selected');
   const cb = label.querySelector('input');
   cb.checked = !cb.checked;
+  label.classList.toggle('selected', cb.checked);
 }
 
 /* ── PRIORITY ── */
