@@ -2,6 +2,7 @@ const KV_URL = process.env.KV_REST_API_URL;
 const KV_TOKEN = process.env.KV_REST_API_TOKEN;
 const VIEW_PASSWORD = process.env.VIEW_PASSWORD;
 const EDIT_PASSWORD = process.env.EDIT_PASSWORD;
+const SUBMIT_PASSWORD = process.env.SUBMIT_PASSWORD;
 
 async function kvSet(key, value, exSeconds) {
   const args = ['SET', key, value];
@@ -29,6 +30,10 @@ export default async function handler(req, res) {
   let role = null;
   if (password === VIEW_PASSWORD) role = 'viewer';
   if (password === EDIT_PASSWORD) role = 'editor';
+  if (password === SUBMIT_PASSWORD) role = 'submitter';
+  // Editor password also grants submit access
+  if (password === EDIT_PASSWORD) role = 'editor';
+
   if (!role) return res.status(401).json({ error: 'Incorrect password' });
 
   const token = generateToken();
