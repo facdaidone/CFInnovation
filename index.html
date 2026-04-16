@@ -1613,7 +1613,7 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Enter' && document.getElementById('authGate').style.display === 'flex') submitAuthPassword();
 });
 
-checkAuth();
+document.addEventListener('DOMContentLoaded', () => checkAuth());
 
 /* ── EDIT MODE ── */
 const EDITABLE_SELECTORS = [
