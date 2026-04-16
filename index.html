@@ -565,14 +565,7 @@ body.edit-mode [contenteditable="true"]:not(:focus) {
 </style>
 </head>
 <body>
-<script>
-  const password = "CfPorkInnovation";
-  const input = prompt("Enter password:");
-  if (input !== password) {
-    document.body.innerHTML = "<h1>Access Denied</h1>";
-  }
-</script>
-  <div id="prog"></div>
+<div id="prog"></div>
 
 <!-- ── PRINT HEADER (hidden on screen, visible in print) ── -->
 <div class="print-header" style="display:none;">
@@ -1554,48 +1547,134 @@ renderLog();
 
 /* ── EDIT MODE ── */
 const EDITABLE_SELECTORS = [
-  /* ROI cards */
   '.roi-label', '.roi-val', '.roi-note',
   '.roi-cell-val', '.roi-cell-note',
-  /* Stat strip */
   '.stat-num', '.stat-key',
-  /* Projected values */
   '.proj-val', '.proj-key', '.proj-note',
-  /* Next phase cards */
   '.nc-title', '.nc-body', '.nc-tag',
-  /* Workstream headers */
   '.ws-title', '.ws-desc', '.wm-val', '.wm-key',
-  /* Workstream bullets */
   '.ws-block li', '.wml-text', '.wml-date',
-  /* Overview tiles */
   '.ov-tile-name', '.ov-tile-desc', '.ov-tile-roi li',
-  /* Arch nodes */
   '.arch-name', '.arch-desc',
-  /* Closing */
   '.closing-h', '.closing-body',
-  /* Section leads */
   '.section-lead',
 ];
 
 let editMode = false;
+let editPassword = '';
 
-function toggleEditMode() {
-  editMode = !editMode;
-  document.body.classList.toggle('edit-mode', editMode);
+/* ── PASSWORD MODAL ── */
+function showPasswordModal() {
+  document.getElementById('pwModal').style.display = 'flex';
+  document.getElementById('pwInput').value = '';
+  document.getElementById('pwError').style.display = 'none';
+  setTimeout(() => document.getElementById('pwInput').focus(), 50);
+}
+
+function closePasswordModal() {
+  document.getElementById('pwModal').style.display = 'none';
+}
+
+function submitPassword() {
+  const pw = document.getElementById('pwInput').value;
+  if (!pw) return;
+  editPassword = pw;
+  closePasswordModal();
+  enterEditMode();
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape') closePasswordModal();
+  if (e.key === 'Enter' && document.getElementById('pwModal').style.display === 'flex') submitPassword();
+});
+
+/* ── ENTER / EXIT EDIT MODE ── */
+function enterEditMode() {
+  editMode = true;
+  document.body.classList.add('edit-mode');
   const btn = document.getElementById('editBtn');
   const hint = document.getElementById('editHint');
-  btn.textContent = editMode ? '✓ Done Editing' : '✏ Edit Content';
-  btn.classList.toggle('on', editMode);
-  hint.classList.toggle('show', editMode);
-
+  btn.textContent = '✓ Done Editing';
+  btn.classList.add('on');
+  hint.classList.add('show');
   EDITABLE_SELECTORS.forEach(sel => {
-    document.querySelectorAll(sel).forEach(el => {
-      el.contentEditable = editMode ? 'true' : 'false';
-    });
+    document.querySelectorAll(sel).forEach(el => { el.contentEditable = 'true'; });
   });
 }
 
-// Prevent Enter key from inserting <div> blocks
+async function toggleEditMode() {
+  if (!editMode) {
+    showPasswordModal();
+    return;
+  }
+  // Exiting edit mode — save
+  const btn = document.getElementById('editBtn');
+  btn.textContent = '⏳ Saving…';
+  btn.disabled = true;
+
+  // Collect editable content
+  const content = {};
+  EDITABLE_SELECTORS.forEach(sel => {
+    document.querySelectorAll(sel).forEach((el, i) => {
+      const key = sel + ':' + i;
+      content[key] = el.innerHTML;
+    });
+  });
+
+  try {
+    const res = await fetch('/api/save', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: editPassword, content }),
+    });
+    if (res.status === 401) {
+      alert('Incorrect password. Changes not saved.');
+      btn.textContent = '✓ Done Editing';
+      btn.disabled = false;
+      return;
+    }
+    if (!res.ok) throw new Error('Save failed');
+  } catch (err) {
+    alert('Save failed. Please check your connection and try again.');
+    btn.textContent = '✓ Done Editing';
+    btn.disabled = false;
+    return;
+  }
+
+  editMode = false;
+  editPassword = '';
+  document.body.classList.remove('edit-mode');
+  btn.textContent = '✏ Edit Content';
+  btn.classList.remove('on');
+  btn.disabled = false;
+  document.getElementById('editHint').classList.remove('show');
+  EDITABLE_SELECTORS.forEach(sel => {
+    document.querySelectorAll(sel).forEach(el => { el.contentEditable = 'false'; });
+  });
+}
+
+/* ── LOAD SAVED CONTENT ON PAGE LOAD ── */
+async function loadSavedContent() {
+  try {
+    const res = await fetch('/api/load');
+    if (!res.ok) return;
+    const { content } = await res.json();
+    if (content) {
+      EDITABLE_SELECTORS.forEach(sel => {
+        document.querySelectorAll(sel).forEach((el, i) => {
+          const key = sel + ':' + i;
+          if (content[key] !== undefined) el.innerHTML = content[key];
+        });
+      });
+    }
+  } catch (err) {
+    console.warn('Could not load saved content:', err);
+  }
+}
+
+loadSavedContent();
+
+// Prevent Enter key from inserting <div> blocks in contentEditable
 document.addEventListener('keydown', e => {
   if (e.key === 'Enter' && document.activeElement.contentEditable === 'true') {
     e.preventDefault();
@@ -1603,6 +1682,24 @@ document.addEventListener('keydown', e => {
   }
 });
 </script>
+
+<!-- ── PASSWORD MODAL ── -->
+<div id="pwModal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.45);z-index:1000;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:10px;padding:2rem 2.5rem;width:340px;box-shadow:0 8px 40px rgba(0,0,0,.18);font-family:var(--sans);">
+    <div style="font-family:var(--mono);font-size:10px;letter-spacing:.13em;text-transform:uppercase;color:var(--red);margin-bottom:.5rem;">// Edit Access</div>
+    <div style="font-size:1.1rem;font-weight:700;margin-bottom:.3rem;">Enter Edit Password</div>
+    <div style="font-size:.83rem;color:var(--muted2);margin-bottom:1.2rem;">Changes will be saved for all users.</div>
+    <input id="pwInput" type="password" placeholder="Password"
+      style="width:100%;border:1px solid var(--border2);border-radius:6px;padding:.6rem .9rem;font-size:.9rem;font-family:var(--sans);outline:none;margin-bottom:.5rem;">
+    <div id="pwError" style="display:none;color:var(--red);font-size:.8rem;margin-bottom:.5rem;">Incorrect password.</div>
+    <div style="display:flex;gap:.6rem;justify-content:flex-end;margin-top:.8rem;">
+      <button onclick="closePasswordModal()"
+        style="padding:.5rem 1rem;border:1px solid var(--border2);border-radius:5px;background:none;cursor:pointer;font-size:.85rem;font-family:var(--sans);">Cancel</button>
+      <button onclick="submitPassword()"
+        style="padding:.5rem 1.2rem;border:none;border-radius:5px;background:var(--red);color:#fff;cursor:pointer;font-size:.85rem;font-weight:600;font-family:var(--sans);">Unlock</button>
+    </div>
+  </div>
+</div>
 
 <!-- ── PRINT BUTTON ── -->
 <button class="print-btn" onclick="window.print()">
