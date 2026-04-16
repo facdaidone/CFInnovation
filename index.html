@@ -630,9 +630,9 @@ body.edit-mode [contenteditable="true"]:not(:focus) {
   <a class="sb-link" href="#next"><span class="sb-pip pip-g"></span>Next Phase</a>
   <a class="sb-link" href="#log"><span class="sb-pip pip-m"></span>Activity Log</a>
 
-  <div class="sb-sect">Requests</div>
-  <a class="sb-link" href="#requests" id="sbRequests"><span class="sb-pip pip-r"></span>New Requests <span id="reqBadge" style="display:none;background:var(--red);color:#fff;font-size:9px;font-family:var(--mono);padding:1px 5px;border-radius:10px;margin-left:auto;"></span></a>
-  <a class="sb-link" href="/submit" target="_blank" style="font-size:11px;"><span class="sb-pip pip-m"></span>Submit a Request ↗</a>
+  <div class="sb-sect" id="sbSectRequests" style="display:none;">Requests</div>
+  <a class="sb-link" href="#requests" id="sbRequests" style="display:none;"><span class="sb-pip pip-r"></span>New Requests <span id="reqBadge" style="display:none;background:var(--red);color:#fff;font-size:9px;font-family:var(--mono);padding:1px 5px;border-radius:10px;margin-left:auto;"></span></a>
+  <a class="sb-link" href="/submit" target="_blank" style="font-size:11px;display:none;" id="sbSubmitLink"><span class="sb-pip pip-m"></span>Submit a Request ↗</a>
 
   <div class="sb-footer">
     Updated Apr 8, 2026<br>
@@ -1375,8 +1375,6 @@ body.edit-mode [contenteditable="true"]:not(:focus) {
 </section>
 
 <!-- ── CLOSING ── -->
-<div class="closing">
-  <div class="eyebrow fade" style="justify-content:center; margin-bottom:.75rem;">Summary</div>
   <div class="closing-h fade">20 standups. 4 site visits.<br>11 workstreams. <em>One path forward.</em></div>
   <p class="closing-body fade">The research phase is documented. Vendors have been evaluated. Two evaluations are closed. Three pilots are scoped and ready to launch. The remaining blockers are known and addressable. The next phase is execution.</p>
   <div class="closing-mono fade">Passion Drives Our Purpose™ &nbsp;·&nbsp; Vation Ventures × Christensen Farms</div>
@@ -1384,10 +1382,9 @@ body.edit-mode [contenteditable="true"]:not(:focus) {
 
 
 <!-- ── NEW REQUESTS SECTION ── -->
-<section class="sec sec-alt" id="requests">
+<section class="sec sec-alt" id="requests" style="display:none;">
   <div class="eyebrow fade">Innovation Pipeline</div>
   <h2 class="fade">New Requests</h2>
-  <p class="section-lead fade">Workstream requests submitted by the Christensen Farms team, pending prioritization and review.</p>
   <div id="requestsContainer">
     <div style="font-family:var(--mono);font-size:11px;color:var(--muted);padding:2rem 0;">Loading requests…</div>
   </div>
@@ -1604,9 +1601,13 @@ function showApp() {
   if (userRole === 'editor') {
     document.getElementById('editBar').style.display = 'flex';
     document.getElementById('adminNav').style.display = 'block';
+    document.getElementById('sbRequests').style.display = 'flex';
+    document.getElementById('sbSectRequests').style.display = 'block';
+    document.getElementById('sbSubmitLink').style.display = 'flex';
+    document.getElementById('requests').style.display = 'block';
+    loadRequests();
   }
   loadSavedContent();
-  loadRequests();
 }
 
 async function submitAuthPassword() {
