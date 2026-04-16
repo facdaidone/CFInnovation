@@ -1,17 +1,19 @@
 import { kv } from '@vercel/kv';
 
-const EDIT_PASSWORD = process.env.EDIT_PASSWORD || 'changeme';
-
 export default async function handler(req, res) {
   if (req.method !== 'POST') {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const { password, content } = req.body;
+  const token = req.headers['x-session-token'];
+  if (!token) return res.status(401).json({ error: 'No session token' });
 
-  if (!password || password !== EDIT_PASSWORD) {
-    return res.status(401).json({ error: 'Invalid password' });
+  const role = await kv.get(`session:${token}`);
+  if (!role || role !== 'editor') {
+    return res.status(401).json({ error: 'Not authorized to edit' });
   }
+
+  const { content } = req.body;
 
   try {
     if (content !== undefined) {

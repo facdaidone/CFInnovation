@@ -6,19 +6,10 @@ export default async function handler(req, res) {
   }
 
   const token = req.headers['x-session-token'];
-  if (!token) return res.status(401).json({ error: 'No session token' });
+  if (!token) return res.status(401).json({ error: 'No token' });
 
   const role = await kv.get(`session:${token}`);
   if (!role) return res.status(401).json({ error: 'Invalid or expired session' });
 
-  try {
-    const content = await kv.get('page:content');
-    return res.status(200).json({
-      content: content ? JSON.parse(content) : null,
-      role,
-    });
-  } catch (err) {
-    console.error('KV load error:', err);
-    return res.status(500).json({ error: 'Failed to load' });
-  }
+  return res.status(200).json({ role });
 }
