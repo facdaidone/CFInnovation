@@ -630,10 +630,20 @@ body.edit-mode [contenteditable="true"]:not(:focus) {
   <a class="sb-link" href="#next"><span class="sb-pip pip-g"></span>Next Phase</a>
   <a class="sb-link" href="#log"><span class="sb-pip pip-m"></span>Activity Log</a>
 
+  <div class="sb-sect">Requests</div>
+  <a class="sb-link" href="#requests" id="sbRequests"><span class="sb-pip pip-r"></span>New Requests <span id="reqBadge" style="display:none;background:var(--red);color:#fff;font-size:9px;font-family:var(--mono);padding:1px 5px;border-radius:10px;margin-left:auto;"></span></a>
+  <a class="sb-link" href="/submit.html" target="_blank" style="font-size:11px;"><span class="sb-pip pip-m"></span>Submit a Request ↗</a>
+
   <div class="sb-footer">
     Updated Apr 8, 2026<br>
     20 weekly reports on file<br>
     <span style="color:var(--red)">●</span> 10 active workstreams
+  </div>
+
+  <!-- ADMIN SECTION - editors only -->
+  <div id="adminNav" style="display:none;border-top:1px solid var(--border);margin-top:.5rem;padding-top:.5rem;">
+    <div class="sb-sect">Admin</div>
+    <button class="sb-link" onclick="toggleAdminPanel()" style="width:calc(100% - .6rem);"><span class="sb-pip pip-m"></span>Notification Emails</button>
   </div>
 </nav>
 
@@ -1372,6 +1382,19 @@ body.edit-mode [contenteditable="true"]:not(:focus) {
   <div class="closing-mono fade">Passion Drives Our Purpose™ &nbsp;·&nbsp; Vation Ventures × Christensen Farms</div>
 </div>
 
+
+<!-- ── NEW REQUESTS SECTION ── -->
+<section class="sec sec-alt" id="requests">
+  <div class="eyebrow fade">Innovation Pipeline</div>
+  <h2 class="fade">New Requests</h2>
+  <p class="section-lead fade">Workstream requests submitted by the Christensen Farms team, pending prioritization and review.</p>
+  <div id="requestsContainer">
+    <div style="font-family:var(--mono);font-size:11px;color:var(--muted);padding:2rem 0;">Loading requests…</div>
+  </div>
+</section>
+
+<div class="divider"></div>
+
 </div><!-- /main -->
 
 <script>
@@ -1578,8 +1601,12 @@ function showAuthGate() {
 function showApp() {
   document.getElementById('authGate').style.display = 'none';
   document.getElementById('appContent').style.display = 'block';
-  if (userRole === 'editor') document.getElementById('editBar').style.display = 'flex';
+  if (userRole === 'editor') {
+    document.getElementById('editBar').style.display = 'flex';
+    document.getElementById('adminNav').style.display = 'block';
+  }
   loadSavedContent();
+  loadRequests();
 }
 
 async function submitAuthPassword() {
@@ -1613,7 +1640,7 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Enter' && document.getElementById('authGate').style.display === 'flex') submitAuthPassword();
 });
 
-document.addEventListener('DOMContentLoaded', () => checkAuth());
+checkAuth();
 
 /* ── EDIT MODE ── */
 const EDITABLE_SELECTORS = [
@@ -1697,6 +1724,180 @@ async function toggleEditMode() {
   });
 }
 
+
+/* ── REQUESTS & ADMIN ── */
+const THEME_LABELS = {
+  consistency: 'Consistency',
+  observability: 'Observability',
+  connectivity: 'Connectivity',
+  throughput: 'Throughput & Efficiency',
+  safety: 'Safety & Well-Being',
+  sustainability: 'Sustainability & Traceability',
+};
+const THEME_CLASSES = {
+  consistency: 'theme-consistency',
+  observability: 'theme-observability',
+  connectivity: 'theme-connectivity',
+  throughput: 'theme-throughput',
+  safety: 'theme-safety',
+  sustainability: 'theme-sustainability',
+};
+
+let requestsData = [];
+let adminEmails = [];
+
+async function loadRequests() {
+  try {
+    const res = await fetch('/api/requests', { headers: { 'x-session-token': sessionToken } });
+    if (!res.ok) return;
+    const { queue } = await res.json();
+    requestsData = queue || [];
+    renderRequests();
+    updateReqBadge();
+  } catch(e) { console.warn('Could not load requests:', e); }
+}
+
+function updateReqBadge() {
+  const pending = requestsData.filter(r => r.status === 'pending').length;
+  const badge = document.getElementById('reqBadge');
+  if (badge) {
+    if (pending > 0) { badge.textContent = pending; badge.style.display = 'inline'; }
+    else { badge.style.display = 'none'; }
+  }
+}
+
+function renderRequests() {
+  const container = document.getElementById('requestsContainer');
+  if (!container) return;
+  if (!requestsData.length) {
+    container.innerHTML = '<div style="font-family:var(--mono);font-size:11px;color:var(--muted);padding:2rem 0;">No requests submitted yet. <a href="/submit.html" target="_blank" style="color:var(--red);">Submit one →</a></div>';
+    return;
+  }
+  const isEditor = userRole === 'editor';
+  container.innerHTML = requestsData.map(r => {
+    const themes = (r.themes || []).map(t => `<span class="theme-badge ${THEME_CLASSES[t] || ''}">${THEME_LABELS[t] || t}</span>`).join(' ');
+    const actions = isEditor ? `
+      <div class="req-card-actions">
+        <select class="req-action-btn" onchange="updateRequestStatus('${r.id}', this.value)" style="font-family:var(--mono);font-size:8px;padding:4px;border-radius:3px;border:1px solid var(--border2);background:none;cursor:pointer;">
+          <option value="pending" ${r.status==='pending'?'selected':''}>Pending</option>
+          <option value="reviewing" ${r.status==='reviewing'?'selected':''}>Reviewing</option>
+          <option value="approved" ${r.status==='approved'?'selected':''}>Approved</option>
+          <option value="declined" ${r.status==='declined'?'selected':''}>Declined</option>
+        </select>
+        <button class="req-action-btn decline" onclick="deleteRequest('${r.id}')">Delete</button>
+      </div>` : '';
+    const benefit = r.benefit ? `<div style="font-size:.78rem;color:var(--muted2);margin-bottom:.5rem;font-style:italic;">"${r.benefit}"</div>` : '';
+    return `
+    <div class="req-card" id="req-${r.id}">
+      <div class="req-card-body">
+        <div class="req-card-title">${r.title}</div>
+        <div class="req-card-desc">${r.desc}</div>
+        ${benefit}
+        <div class="req-card-meta">
+          <span class="req-priority pri-${r.priority}">${r.priority}</span>
+          <span class="req-status status-${r.status}">${r.status}</span>
+          ${themes}
+          <span class="req-submitter">${r.submitter || 'Anonymous'} · ${new Date(r.submittedAt).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span>
+        </div>
+      </div>
+      ${actions}
+    </div>`;
+  }).join('');
+}
+
+async function updateRequestStatus(id, status) {
+  try {
+    const res = await fetch('/api/requests', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-session-token': sessionToken },
+      body: JSON.stringify({ action: 'status', id, status })
+    });
+    if (res.ok) {
+      const { queue } = await res.json();
+      requestsData = queue;
+      renderRequests();
+      updateReqBadge();
+    }
+  } catch(e) { console.warn('Could not update status:', e); }
+}
+
+async function deleteRequest(id) {
+  if (!confirm('Delete this request?')) return;
+  try {
+    const res = await fetch('/api/requests', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-session-token': sessionToken },
+      body: JSON.stringify({ action: 'delete', id })
+    });
+    if (res.ok) {
+      const { queue } = await res.json();
+      requestsData = queue;
+      renderRequests();
+      updateReqBadge();
+    }
+  } catch(e) { console.warn('Could not delete request:', e); }
+}
+
+/* ── ADMIN PANEL ── */
+async function loadAdminSettings() {
+  try {
+    const res = await fetch('/api/admin', { headers: { 'x-session-token': sessionToken } });
+    if (!res.ok) return;
+    const { settings } = await res.json();
+    adminEmails = settings.notifyEmails || [];
+    renderAdminEmails();
+  } catch(e) {}
+}
+
+function renderAdminEmails() {
+  const list = document.getElementById('adminEmailList');
+  if (!list) return;
+  if (!adminEmails.length) {
+    list.innerHTML = '<div style="font-size:.75rem;color:var(--muted);padding:4px 0;">No emails added yet</div>';
+    return;
+  }
+  list.innerHTML = adminEmails.map((email, i) => `
+    <div class="admin-email-item">
+      <span>${email}</span>
+      <button class="admin-email-remove" onclick="removeEmail(${i})">✕</button>
+    </div>`).join('');
+}
+
+function removeEmail(idx) {
+  adminEmails.splice(idx, 1);
+  renderAdminEmails();
+}
+
+function addEmail() {
+  const input = document.getElementById('adminEmailInput');
+  const email = input.value.trim();
+  if (!email || !email.includes('@')) return;
+  if (!adminEmails.includes(email)) adminEmails.push(email);
+  input.value = '';
+  renderAdminEmails();
+}
+
+async function saveAdminSettings() {
+  try {
+    const res = await fetch('/api/admin', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-session-token': sessionToken },
+      body: JSON.stringify({ settings: { notifyEmails: adminEmails } })
+    });
+    if (res.ok) {
+      const btn = document.getElementById('adminSaveBtn');
+      btn.textContent = 'Saved ✓';
+      setTimeout(() => btn.textContent = 'Save Settings', 2000);
+    }
+  } catch(e) {}
+}
+
+function toggleAdminPanel() {
+  const panel = document.getElementById('adminPanel');
+  panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
+  if (panel.style.display === 'block') loadAdminSettings();
+}
+
 async function loadSavedContent() {
   try {
     const res = await fetch('/api/load', { headers: { 'x-session-token': sessionToken } });
@@ -1720,6 +1921,20 @@ document.addEventListener('keydown', e => {
 </script>
 
 </div><!-- end appContent -->
+
+<!-- ── ADMIN PANEL ── -->
+<div id="adminPanel" style="display:none;position:fixed;bottom:0;left:0;width:var(--sb);background:var(--bg2);border-top:1px solid var(--border);border-right:1px solid var(--border);padding:1rem 1.25rem;z-index:300;box-shadow:0 -4px 20px rgba(0,0,0,.08);">
+  <div class="admin-panel-title">
+    <span>// Notify Emails</span>
+    <button onclick="toggleAdminPanel()" style="background:none;border:none;cursor:pointer;color:var(--muted);font-size:.9rem;">✕</button>
+  </div>
+  <div class="admin-email-list" id="adminEmailList"></div>
+  <div class="admin-email-add">
+    <input type="email" id="adminEmailInput" placeholder="email@example.com" onkeydown="if(event.key==='Enter')addEmail()">
+    <button onclick="addEmail()">Add</button>
+  </div>
+  <button class="admin-save-btn" id="adminSaveBtn" onclick="saveAdminSettings()">Save Settings</button>
+</div>
 
 <!-- ── VIEW AUTH GATE ── -->
 <div id="authGate" style="display:none;position:fixed;inset:0;background:#f4f3f0;z-index:2000;align-items:center;justify-content:center;">
