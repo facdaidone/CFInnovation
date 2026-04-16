@@ -632,7 +632,7 @@ body.edit-mode [contenteditable="true"]:not(:focus) {
 
   <div class="sb-sect">Requests</div>
   <a class="sb-link" href="#requests" id="sbRequests"><span class="sb-pip pip-r"></span>New Requests <span id="reqBadge" style="display:none;background:var(--red);color:#fff;font-size:9px;font-family:var(--mono);padding:1px 5px;border-radius:10px;margin-left:auto;"></span></a>
-  <a class="sb-link" href="/submit.html" target="_blank" style="font-size:11px;"><span class="sb-pip pip-m"></span>Submit a Request ↗</a>
+  <a class="sb-link" href="/submit" target="_blank" style="font-size:11px;"><span class="sb-pip pip-m"></span>Submit a Request ↗</a>
 
   <div class="sb-footer">
     Updated Apr 8, 2026<br>
@@ -1640,7 +1640,7 @@ document.addEventListener('keydown', e => {
   if (e.key === 'Enter' && document.getElementById('authGate').style.display === 'flex') submitAuthPassword();
 });
 
-checkAuth();
+document.addEventListener("DOMContentLoaded", () => checkAuth());
 
 /* ── EDIT MODE ── */
 const EDITABLE_SELECTORS = [

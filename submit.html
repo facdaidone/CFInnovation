@@ -1,0 +1,390 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Submit a Workstream Request | CF × Vation</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=DM+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg: #f4f3f0;
+  --card: #ffffff;
+  --border: rgba(0,0,0,0.08);
+  --border2: rgba(0,0,0,0.14);
+  --red: #ED193A;
+  --red2: rgba(237,25,58,0.09);
+  --text: #181715;
+  --muted: #999693;
+  --muted2: #5c5a57;
+  --mono: 'Space Mono', monospace;
+  --sans: 'DM Sans', sans-serif;
+}
+* { margin:0; padding:0; box-sizing:border-box; }
+body { background:var(--bg); color:var(--text); font-family:var(--sans); font-size:15px; min-height:100vh; display:flex; flex-direction:column; align-items:center; justify-content:flex-start; padding:2rem 1rem 4rem; }
+
+/* Auth Gate */
+#authGate {
+  display:none; position:fixed; inset:0; background:var(--bg);
+  z-index:2000; align-items:center; justify-content:center;
+}
+
+/* Header */
+.page-header {
+  width:100%; max-width:640px; display:flex; align-items:center;
+  justify-content:space-between; margin-bottom:2.5rem; padding-bottom:1.25rem;
+  border-bottom:1px solid var(--border);
+}
+.logo { display:flex; align-items:center; gap:10px; }
+.logo-dot {
+  width:30px; height:30px; border-radius:6px; background:var(--red);
+  display:flex; align-items:center; justify-content:center;
+  font-family:var(--mono); font-size:9px; font-weight:700; color:#fff;
+}
+.logo-name { font-size:11px; font-weight:600; letter-spacing:.06em; text-transform:uppercase; line-height:1.3; }
+.logo-sub { font-family:var(--mono); font-size:8px; color:var(--muted); }
+.back-link {
+  font-family:var(--mono); font-size:9px; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--muted2); text-decoration:none; display:flex; align-items:center; gap:5px;
+}
+.back-link:hover { color:var(--red); }
+
+/* Form card */
+.form-card {
+  width:100%; max-width:640px; background:var(--card);
+  border:1px solid var(--border); border-radius:12px; padding:2.5rem;
+}
+.form-eyebrow {
+  font-family:var(--mono); font-size:10px; letter-spacing:.13em; text-transform:uppercase;
+  color:var(--red); display:flex; align-items:center; gap:6px; margin-bottom:.5rem;
+}
+.form-eyebrow::before { content:'//'; opacity:.4; }
+.form-title { font-size:1.5rem; font-weight:700; letter-spacing:-.02em; margin-bottom:.4rem; }
+.form-desc { font-size:.88rem; color:var(--muted2); line-height:1.65; margin-bottom:2rem; }
+
+.field { margin-bottom:1.4rem; }
+.field label {
+  display:block; font-size:.8rem; font-weight:600; letter-spacing:.04em;
+  text-transform:uppercase; color:var(--muted2); margin-bottom:.5rem;
+}
+.field input, .field textarea, .field select {
+  width:100%; border:1px solid var(--border2); border-radius:6px;
+  padding:.65rem .9rem; font-size:.9rem; font-family:var(--sans);
+  background:#fff; color:var(--text); outline:none;
+  transition:border-color .15s;
+}
+.field input:focus, .field textarea:focus, .field select:focus {
+  border-color:var(--red);
+}
+.field textarea { resize:vertical; min-height:100px; line-height:1.6; }
+.field select { appearance:none; background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 12 12'%3E%3Cpath fill='%23999' d='M6 8L1 3h10z'/%3E%3C/svg%3E"); background-repeat:no-repeat; background-position:right .9rem center; padding-right:2.5rem; }
+
+/* Theme checkboxes */
+.theme-grid { display:grid; grid-template-columns:1fr 1fr; gap:.5rem; }
+.theme-chip {
+  display:flex; align-items:flex-start; gap:.5rem;
+  border:1px solid var(--border2); border-radius:6px; padding:.65rem .8rem;
+  cursor:pointer; transition:all .15s; user-select:none;
+}
+.theme-chip:hover { border-color:var(--red); background:var(--red2); }
+.theme-chip.selected { border-color:var(--red); background:var(--red2); }
+.theme-chip input { display:none; }
+.theme-chip-dot { width:8px; height:8px; border-radius:50%; flex-shrink:0; margin-top:4px; }
+.theme-chip-text { font-size:.78rem; font-weight:500; line-height:1.4; }
+.theme-chip-sub { font-size:.7rem; color:var(--muted2); line-height:1.3; margin-top:1px; }
+
+/* Priority */
+.priority-row { display:flex; gap:.5rem; }
+.priority-btn {
+  flex:1; padding:.55rem; border:1px solid var(--border2); border-radius:6px;
+  background:none; font-size:.8rem; font-weight:500; font-family:var(--sans);
+  cursor:pointer; transition:all .15s; text-align:center;
+}
+.priority-btn:hover { border-color:var(--red); }
+.priority-btn.selected { background:var(--red); border-color:var(--red); color:#fff; font-weight:600; }
+
+/* Submit */
+.submit-btn {
+  width:100%; padding:.85rem; background:var(--red); border:none; border-radius:7px;
+  color:#fff; font-size:.95rem; font-weight:700; font-family:var(--sans);
+  cursor:pointer; transition:opacity .15s; margin-top:.5rem; letter-spacing:.01em;
+}
+.submit-btn:hover { opacity:.9; }
+.submit-btn:disabled { opacity:.5; cursor:not-allowed; }
+.field-hint { font-size:.75rem; color:var(--muted); margin-top:.3rem; }
+
+/* Thank you */
+#thankYou {
+  display:none; width:100%; max-width:640px; text-align:center;
+  background:var(--card); border:1px solid var(--border); border-radius:12px;
+  padding:3.5rem 2.5rem;
+}
+.ty-icon {
+  width:56px; height:56px; background:rgba(21,128,61,.1); border-radius:50%;
+  display:flex; align-items:center; justify-content:center; margin:0 auto 1.5rem;
+  font-size:1.5rem;
+}
+.ty-title { font-size:1.4rem; font-weight:700; margin-bottom:.5rem; }
+.ty-body { font-size:.9rem; color:var(--muted2); line-height:1.7; max-width:400px; margin:0 auto 1.5rem; }
+.ty-back {
+  display:inline-flex; align-items:center; gap:5px;
+  font-family:var(--mono); font-size:9px; letter-spacing:.1em; text-transform:uppercase;
+  color:var(--red); background:var(--red2); padding:8px 16px; border-radius:4px;
+  text-decoration:none; border:none; cursor:pointer;
+}
+
+@media (max-width:600px) {
+  .theme-grid { grid-template-columns:1fr; }
+  .form-card { padding:1.5rem; }
+}
+</style>
+</head>
+<body>
+
+<!-- AUTH GATE -->
+<div id="authGate" style="display:none;position:fixed;inset:0;background:var(--bg);z-index:2000;align-items:center;justify-content:center;">
+  <div style="background:#fff;border-radius:12px;padding:2.5rem 3rem;width:380px;max-width:90vw;box-shadow:0 8px 48px rgba(0,0,0,.12);font-family:var(--sans);">
+    <div style="display:flex;align-items:center;gap:10px;margin-bottom:1.5rem;">
+      <div style="width:32px;height:32px;border-radius:6px;background:var(--red);display:flex;align-items:center;justify-content:center;font-size:9px;font-weight:700;color:#fff;font-family:var(--mono);flex-shrink:0;">CF</div>
+      <div>
+        <div style="font-size:11px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;">Christensen Farms</div>
+        <div style="font-family:var(--mono);font-size:8.5px;color:var(--muted);">× Vation Ventures</div>
+      </div>
+    </div>
+    <div style="font-size:1.1rem;font-weight:700;margin-bottom:.3rem;">Submit a Request</div>
+    <div style="font-size:.85rem;color:var(--muted2);margin-bottom:1.5rem;">Enter the submission password to continue.</div>
+    <input id="authInput" type="password" placeholder="Password"
+      style="width:100%;border:1px solid var(--border2);border-radius:6px;padding:.65rem 1rem;font-size:.9rem;font-family:var(--sans);outline:none;margin-bottom:.5rem;box-sizing:border-box;">
+    <div id="authError" style="display:none;color:var(--red);font-size:.8rem;margin-bottom:.5rem;">Incorrect password.</div>
+    <button id="authBtn" onclick="submitAuth()"
+      style="width:100%;padding:.65rem;border:none;border-radius:6px;background:var(--red);color:#fff;font-size:.9rem;font-weight:600;font-family:var(--sans);cursor:pointer;margin-top:.5rem;">
+      Continue
+    </button>
+  </div>
+</div>
+
+<!-- PAGE HEADER -->
+<div class="page-header" id="mainContent" style="display:none;">
+  <div class="logo">
+    <div class="logo-dot">CF</div>
+    <div>
+      <div class="logo-name">Christensen Farms</div>
+      <div class="logo-sub">× Vation Ventures</div>
+    </div>
+  </div>
+  <a class="back-link" href="/index.html">← Back to Dashboard</a>
+</div>
+
+<!-- FORM -->
+<div class="form-card" id="formCard" style="display:none;">
+  <div class="form-eyebrow">New Request</div>
+  <div class="form-title">Submit a Workstream Request</div>
+  <div class="form-desc">Have an idea, challenge, or opportunity you'd like Vation to explore? Submit it here and we'll review and prioritize it for the next planning cycle.</div>
+
+  <div class="field">
+    <label>Request Title *</label>
+    <input type="text" id="reqTitle" placeholder="e.g. Automated feed monitoring system">
+  </div>
+
+  <div class="field">
+    <label>Description *</label>
+    <textarea id="reqDesc" placeholder="Describe the problem you're trying to solve or the opportunity you see. What's the current pain point?"></textarea>
+  </div>
+
+  <div class="field">
+    <label>Expected Benefit</label>
+    <textarea id="reqBenefit" placeholder="What would success look like? Any rough estimate of impact (time saved, cost reduced, etc.)" style="min-height:80px;"></textarea>
+  </div>
+
+  <div class="field">
+    <label>Strategic Themes <span style="font-weight:400;text-transform:none;letter-spacing:0;font-size:.75rem;color:var(--muted)">(select all that apply)</span></label>
+    <div class="theme-grid" id="themeGrid">
+      <label class="theme-chip" onclick="toggleTheme(this)">
+        <input type="checkbox" value="consistency">
+        <span class="theme-chip-dot" style="background:#ED193A;"></span>
+        <div><div class="theme-chip-text">Consistency</div><div class="theme-chip-sub">Predictable pig flow & stable outputs</div></div>
+      </label>
+      <label class="theme-chip" onclick="toggleTheme(this)">
+        <input type="checkbox" value="observability">
+        <span class="theme-chip-dot" style="background:#1e40af;"></span>
+        <div><div class="theme-chip-text">Observability</div><div class="theme-chip-sub">Real-time visibility into operations</div></div>
+      </label>
+      <label class="theme-chip" onclick="toggleTheme(this)">
+        <input type="checkbox" value="connectivity">
+        <span class="theme-chip-dot" style="background:#15803d;"></span>
+        <div><div class="theme-chip-text">Connectivity</div><div class="theme-chip-sub">Link people, systems & processes</div></div>
+      </label>
+      <label class="theme-chip" onclick="toggleTheme(this)">
+        <input type="checkbox" value="throughput">
+        <span class="theme-chip-dot" style="background:#92400e;"></span>
+        <div><div class="theme-chip-text">Throughput & Efficiency</div><div class="theme-chip-sub">More output, lower cost & labor</div></div>
+      </label>
+      <label class="theme-chip" onclick="toggleTheme(this)">
+        <input type="checkbox" value="safety">
+        <span class="theme-chip-dot" style="background:#7c3aed;"></span>
+        <div><div class="theme-chip-text">Safety & Well-Being</div><div class="theme-chip-sub">Eliminate incidents, enhance animal care</div></div>
+      </label>
+      <label class="theme-chip" onclick="toggleTheme(this)">
+        <input type="checkbox" value="sustainability">
+        <span class="theme-chip-dot" style="background:#0369a1;"></span>
+        <div><div class="theme-chip-text">Sustainability & Traceability</div><div class="theme-chip-sub">Reduce resource use & strengthen transparency</div></div>
+      </label>
+    </div>
+  </div>
+
+  <div class="field">
+    <label>Suggested Priority</label>
+    <div class="priority-row" id="priorityRow">
+      <button class="priority-btn" onclick="setPriority('low', this)">Low</button>
+      <button class="priority-btn selected" onclick="setPriority('medium', this)">Medium</button>
+      <button class="priority-btn" onclick="setPriority('high', this)">High</button>
+      <button class="priority-btn" onclick="setPriority('critical', this)">Critical</button>
+    </div>
+    <div class="field-hint">This is your suggestion — Vation will confirm final priority.</div>
+  </div>
+
+  <div class="field">
+    <label>Submitted By</label>
+    <input type="text" id="reqSubmitter" placeholder="Your name (optional)">
+  </div>
+
+  <div class="field">
+    <label>Contact Email</label>
+    <input type="email" id="reqEmail" placeholder="your@email.com (optional — for follow-up)">
+  </div>
+
+  <div id="submitError" style="display:none;color:var(--red);font-size:.85rem;margin-bottom:1rem;padding:.65rem .9rem;background:var(--red2);border-radius:6px;"></div>
+  <button class="submit-btn" id="submitBtn" onclick="submitRequest()">Submit Request →</button>
+</div>
+
+<!-- THANK YOU -->
+<div id="thankYou">
+  <div class="ty-icon">✓</div>
+  <div class="ty-title">Request Submitted!</div>
+  <div class="ty-body">Thank you — your workstream request has been received. The Vation team will review it and reach out if they have any questions.</div>
+  <button class="ty-back" onclick="resetForm()">Submit Another Request</button>
+</div>
+
+<script>
+let selectedPriority = 'medium';
+let authToken = sessionStorage.getItem('cf_submit_token');
+
+/* ── AUTH ── */
+async function checkAuth() {
+  if (authToken) {
+    try {
+      const res = await fetch('/api/verify', { headers: { 'x-session-token': authToken } });
+      if (res.ok) { showForm(); return; }
+    } catch(e) {}
+    sessionStorage.removeItem('cf_submit_token');
+    authToken = null;
+  }
+  document.getElementById('authGate').style.display = 'flex';
+  setTimeout(() => document.getElementById('authInput').focus(), 100);
+}
+
+async function submitAuth() {
+  const pw = document.getElementById('authInput').value;
+  const btn = document.getElementById('authBtn');
+  const err = document.getElementById('authError');
+  if (!pw) return;
+  btn.textContent = 'Checking…'; btn.disabled = true; err.style.display = 'none';
+  try {
+    const res = await fetch('/api/auth', {
+      method: 'POST', headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ password: pw, type: 'submit' })
+    });
+    if (res.status === 401) {
+      err.style.display = 'block'; btn.textContent = 'Continue'; btn.disabled = false;
+      document.getElementById('authInput').value = '';
+      document.getElementById('authInput').focus();
+      return;
+    }
+    const { token } = await res.json();
+    authToken = token;
+    sessionStorage.setItem('cf_submit_token', token);
+    document.getElementById('authGate').style.display = 'none';
+    showForm();
+  } catch(e) {
+    err.textContent = 'Connection error.'; err.style.display = 'block';
+    btn.textContent = 'Continue'; btn.disabled = false;
+  }
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Enter' && document.getElementById('authGate').style.display === 'flex') submitAuth();
+});
+
+function showForm() {
+  document.getElementById('mainContent').style.display = 'flex';
+  document.getElementById('formCard').style.display = 'block';
+}
+
+/* ── THEME TOGGLE ── */
+function toggleTheme(label) {
+  label.classList.toggle('selected');
+  const cb = label.querySelector('input');
+  cb.checked = !cb.checked;
+}
+
+/* ── PRIORITY ── */
+function setPriority(val, btn) {
+  selectedPriority = val;
+  document.querySelectorAll('.priority-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+/* ── SUBMIT ── */
+async function submitRequest() {
+  const title = document.getElementById('reqTitle').value.trim();
+  const desc = document.getElementById('reqDesc').value.trim();
+  const benefit = document.getElementById('reqBenefit').value.trim();
+  const submitter = document.getElementById('reqSubmitter').value.trim();
+  const email = document.getElementById('reqEmail').value.trim();
+  const errEl = document.getElementById('submitError');
+
+  if (!title || !desc) {
+    errEl.textContent = 'Please fill in the required fields: Title and Description.';
+    errEl.style.display = 'block';
+    return;
+  }
+
+  const themes = Array.from(document.querySelectorAll('#themeGrid input:checked')).map(cb => cb.value);
+
+  const btn = document.getElementById('submitBtn');
+  btn.textContent = 'Submitting…'; btn.disabled = true; errEl.style.display = 'none';
+
+  try {
+    const res = await fetch('/api/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-session-token': authToken },
+      body: JSON.stringify({ title, desc, benefit, themes, priority: selectedPriority, submitter, email })
+    });
+    if (!res.ok) throw new Error('Submit failed');
+    document.getElementById('formCard').style.display = 'none';
+    document.getElementById('mainContent').style.display = 'none';
+    document.getElementById('thankYou').style.display = 'block';
+  } catch(e) {
+    errEl.textContent = 'Submission failed. Please try again.';
+    errEl.style.display = 'block';
+    btn.textContent = 'Submit Request →'; btn.disabled = false;
+  }
+}
+
+function resetForm() {
+  document.getElementById('reqTitle').value = '';
+  document.getElementById('reqDesc').value = '';
+  document.getElementById('reqBenefit').value = '';
+  document.getElementById('reqSubmitter').value = '';
+  document.getElementById('reqEmail').value = '';
+  document.querySelectorAll('.theme-chip').forEach(c => c.classList.remove('selected'));
+  document.querySelectorAll('#themeGrid input').forEach(c => c.checked = false);
+  setPriority('medium', document.querySelectorAll('.priority-btn')[1]);
+  document.getElementById('thankYou').style.display = 'none';
+  document.getElementById('formCard').style.display = 'block';
+  document.getElementById('mainContent').style.display = 'flex';
+}
+
+document.addEventListener("DOMContentLoaded", () => checkAuth());
+</script>
+</body>
+</html>
