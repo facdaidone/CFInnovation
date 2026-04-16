@@ -20,7 +20,11 @@ export default async function handler(req, res) {
 
   try {
     const raw = await kvGet('page:content');
-    const content = raw ? JSON.parse(raw) : null;
+    let content = null;
+    if (raw) {
+      // Handle both string and already-parsed object from Upstash
+      content = typeof raw === 'string' ? JSON.parse(raw) : raw;
+    }
     return res.status(200).json({ content, role });
   } catch (err) {
     console.error('KV load error:', err);

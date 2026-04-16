@@ -10,10 +10,11 @@ async function kvGet(key) {
 }
 
 async function kvSet(key, value) {
-  const res = await fetch(`${KV_URL}/set/${encodeURIComponent(key)}`, {
+  // Use the pipeline endpoint with SET command for reliable string storage
+  const res = await fetch(`${KV_URL}/pipeline`, {
     method: 'POST',
     headers: { Authorization: `Bearer ${KV_TOKEN}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify(value),
+    body: JSON.stringify([['SET', key, typeof value === 'string' ? value : JSON.stringify(value)]]),
   });
   return res.json();
 }
