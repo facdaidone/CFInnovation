@@ -1374,8 +1374,6 @@ body.edit-mode [contenteditable="true"]:not(:focus) {
   </div>
 </section>
 
-<!-- ── CLOSING ── -->
-  <div class="closing-h fade">20 standups. 4 site visits.<br>11 workstreams. <em>One path forward.</em></div>
   <p class="closing-body fade">The research phase is documented. Vendors have been evaluated. Two evaluations are closed. Three pilots are scoped and ready to launch. The remaining blockers are known and addressable. The next phase is execution.</p>
   <div class="closing-mono fade">Passion Drives Our Purpose™ &nbsp;·&nbsp; Vation Ventures × Christensen Farms</div>
 </div>
@@ -1771,39 +1769,58 @@ function renderRequests() {
   const container = document.getElementById('requestsContainer');
   if (!container) return;
   if (!requestsData.length) {
-    container.innerHTML = '<div style="font-family:var(--mono);font-size:11px;color:var(--muted);padding:2rem 0;">No requests submitted yet. <a href="/submit.html" target="_blank" style="color:var(--red);">Submit one →</a></div>';
+    container.innerHTML = '<div style="font-family:var(--mono);font-size:11px;color:var(--muted);padding:2rem 0;">No requests submitted yet. <a href="/submit" target="_blank" style="color:var(--red);">Submit one →</a></div>';
     return;
   }
   const isEditor = userRole === 'editor';
-  container.innerHTML = requestsData.map(r => {
-    const themes = (r.themes || []).map(t => `<span class="theme-badge ${THEME_CLASSES[t] || ''}">${THEME_LABELS[t] || t}</span>`).join(' ');
-    const actions = isEditor ? `
-      <div class="req-card-actions">
-        <select class="req-action-btn" onchange="updateRequestStatus('${r.id}', this.value)" style="font-family:var(--mono);font-size:8px;padding:4px;border-radius:3px;border:1px solid var(--border2);background:none;cursor:pointer;">
-          <option value="pending" ${r.status==='pending'?'selected':''}>Pending</option>
-          <option value="reviewing" ${r.status==='reviewing'?'selected':''}>Reviewing</option>
-          <option value="approved" ${r.status==='approved'?'selected':''}>Approved</option>
-          <option value="declined" ${r.status==='declined'?'selected':''}>Declined</option>
-        </select>
-        <button class="req-action-btn decline" onclick="deleteRequest('${r.id}')">Delete</button>
-      </div>` : '';
-    const benefit = r.benefit ? `<div style="font-size:.78rem;color:var(--muted2);margin-bottom:.5rem;font-style:italic;">"${r.benefit}"</div>` : '';
-    return `
-    <div class="req-card" id="req-${r.id}">
-      <div class="req-card-body">
-        <div class="req-card-title">${r.title}</div>
-        <div class="req-card-desc">${r.desc}</div>
-        ${benefit}
-        <div class="req-card-meta">
-          <span class="req-priority pri-${r.priority}">${r.priority}</span>
-          <span class="req-status status-${r.status}">${r.status}</span>
-          ${themes}
-          <span class="req-submitter">${r.submitter || 'Anonymous'} · ${new Date(r.submittedAt).toLocaleDateString('en-US',{month:'short',day:'numeric'})}</span>
-        </div>
-      </div>
-      ${actions}
-    </div>`;
+  const statusMap = { pending:'Pending', reviewing:'Reviewing', approved:'Approved', declined:'Declined' };
+  const statusClass = { pending:'lb-m', reviewing:'lb-b', approved:'lb-g', declined:'lb-m' };
+  const priClass = { low:'pri-low', medium:'pri-medium', high:'pri-high', critical:'pri-critical' };
+
+  const rows = requestsData.map(r => {
+    const themes = (r.themes || []).map(t =>
+      `<span class="theme-badge ${THEME_CLASSES[t] || ''}">${THEME_LABELS[t] || t}</span>`
+    ).join(' ');
+    const statusSel = isEditor ? `
+      <select onchange="updateRequestStatus('${r.id}', this.value)"
+        style="font-family:var(--mono);font-size:8px;padding:3px 5px;border-radius:3px;border:1px solid var(--border2);background:none;cursor:pointer;color:var(--muted2);">
+        <option value="pending" ${r.status==='pending'?'selected':''}>Pending</option>
+        <option value="reviewing" ${r.status==='reviewing'?'selected':''}>Reviewing</option>
+        <option value="approved" ${r.status==='approved'?'selected':''}>Approved</option>
+        <option value="declined" ${r.status==='declined'?'selected':''}>Declined</option>
+      </select>` :
+      `<span class="log-badge ${statusClass[r.status]||'lb-m'}">${statusMap[r.status]||r.status}</span>`;
+    const delBtn = isEditor ?
+      `<button onclick="deleteRequest('${r.id}')" title="Delete" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:.8rem;padding:0 4px;">✕</button>` : '';
+    const date = new Date(r.submittedAt).toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    return `<tr id="req-${r.id}">
+      <td style="font-size:.82rem;font-weight:600;color:var(--text);line-height:1.4;">
+        ${r.title}
+        ${r.desc ? `<div style="font-size:.78rem;font-weight:400;color:var(--muted2);margin-top:2px;line-height:1.5;">${r.desc}</div>` : ''}
+      </td>
+      <td style="white-space:nowrap;"><span class="req-priority ${priClass[r.priority]||'pri-medium'}">${r.priority}</span></td>
+      <td>${themes || '<span style="color:var(--muted);font-size:.75rem;">—</span>'}</td>
+      <td style="font-family:var(--mono);font-size:9px;color:var(--muted);white-space:nowrap;">${r.submitter||'Anonymous'}<br>${date}</td>
+      <td style="white-space:nowrap;">${statusSel}</td>
+      ${isEditor ? `<td>${delBtn}</td>` : ''}
+    </tr>`;
   }).join('');
+
+  const extraHeader = isEditor ? '<th></th>' : '';
+  container.innerHTML = `
+    <div class="log-wrap">
+      <table class="log-table">
+        <thead><tr>
+          <th>Request</th>
+          <th>Priority</th>
+          <th>Themes</th>
+          <th>Submitted</th>
+          <th>Status</th>
+          ${extraHeader}
+        </tr></thead>
+        <tbody>${rows}</tbody>
+      </table>
+    </div>`;
 }
 
 async function updateRequestStatus(id, status) {
