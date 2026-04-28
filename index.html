@@ -1791,7 +1791,7 @@ function renderRequests() {
       `<button onclick="deleteRequest('${r.id}')" title="Delete" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:.8rem;padding:0 4px;">✕</button>` : '';
     const date = new Date(r.submittedAt).toLocaleDateString('en-US',{month:'short',day:'numeric'});
     return `<tr id="req-${r.id}">
-      <td style="font-size:.82rem;font-weight:600;color:var(--text);line-height:1.4;">
+      <td style="font-size:.82rem;font-weight:600;color:var(--text);line-height:1.4;word-wrap:break-word;overflow-wrap:break-word;">
         ${r.title}
         ${r.desc ? `<div style="font-size:.78rem;font-weight:400;color:var(--muted2);margin-top:2px;line-height:1.5;">${r.desc}</div>` : ''}
       </td>
@@ -1803,16 +1803,16 @@ function renderRequests() {
     </tr>`;
   }).join('');
 
-  const extraHeader = isEditor ? '<th></th>' : '';
+  const extraHeader = isEditor ? '<th style="width:40px;"></th>' : '';
   container.innerHTML = `
     <div class="log-wrap">
-      <table class="log-table">
+      <table class="log-table" style="table-layout:fixed;width:100%;">
         <thead><tr>
-          <th>Request</th>
-          <th>Priority</th>
-          <th>Themes</th>
-          <th>Submitted</th>
-          <th>Status</th>
+          <th style="width:40%;">Request</th>
+          <th style="width:80px;">Priority</th>
+          <th style="width:25%;">Themes</th>
+          <th style="width:110px;">Submitted</th>
+          <th style="width:120px;">Status</th>
           ${extraHeader}
         </tr></thead>
         <tbody>${rows}</tbody>
