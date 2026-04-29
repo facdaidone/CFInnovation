@@ -724,6 +724,91 @@ body.edit-mode [contenteditable="true"]:not(:focus) {
 .req-clickable { cursor: pointer; }
 .req-clickable:hover td { background: var(--red3) !important; }
 .matrix-tbl tr.req-clickable:hover { background: var(--red3); }
+
+/* ── PIG FLOW SECTION ── */
+.pf-stage-card {
+  background: var(--card); border: 1px solid var(--border); border-radius: 8px;
+  overflow: hidden; margin-bottom: 2px; transition: border-color .15s;
+  box-shadow: 0 1px 3px rgba(0,0,0,.05);
+}
+.pf-stage-card.pf-open { border-color: var(--border2); }
+.pf-stage-header {
+  display: flex; align-items: center; gap: 11px;
+  padding: 13px 16px; cursor: pointer; user-select: none;
+  transition: background .12s;
+}
+.pf-stage-header:hover { background: var(--bg3); }
+.pf-risk-bar { width: 3px; height: 28px; border-radius: 2px; flex-shrink: 0; }
+.pf-rb-green  { background: #1D9E75; }
+.pf-rb-amber  { background: var(--amber); }
+.pf-rb-red    { background: var(--red); }
+.pf-stage-name { font-size: .9rem; font-weight: 600; color: var(--text); flex: 1; }
+.pf-stage-days { font-family: var(--mono); font-size: 10px; color: var(--muted); white-space: nowrap; margin-right: 6px; }
+.pf-stage-mort {
+  font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 5px; white-space: nowrap; margin-right: 4px;
+}
+.pf-mort-green  { background: #E8F7F2; color: #085041; }
+.pf-mort-amber  { background: var(--amber2); color: var(--amber); }
+.pf-mort-red    { background: var(--red2); color: #b91c1c; }
+.pf-chevron { width: 18px; height: 18px; display: flex; align-items: center; justify-content: center; color: var(--muted); transition: transform .22s; flex-shrink: 0; }
+.pf-stage-card.pf-open .pf-chevron { transform: rotate(180deg); }
+.pf-stage-detail { display: none; padding: 0 16px 16px; border-top: 1px solid var(--border); }
+.pf-stage-card.pf-open .pf-stage-detail { display: block; }
+.pf-detail-desc { font-size: .83rem; color: var(--muted2); line-height: 1.65; padding: 10px 0 8px; }
+.pf-section-label { font-family: var(--mono); font-size: 9px; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin: 10px 0 5px; }
+.pf-risk-list { padding-left: 16px; margin-bottom: 4px; }
+.pf-risk-list li { font-size: .8rem; color: var(--muted2); line-height: 1.75; }
+.pf-inno-list { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px; }
+.pf-inno-badge {
+  display: inline-flex; align-items: center; gap: 7px;
+  padding: 5px 11px; border-radius: 6px; border: 1px solid var(--border);
+  background: var(--bg3); cursor: pointer; font-size: .78rem; color: var(--text);
+  transition: border-color .13s, background .13s; font-family: var(--sans);
+}
+.pf-inno-badge:hover { border-color: var(--border2); background: var(--card2); }
+.pf-inno-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+.pf-inno-status { font-size: 10px; color: var(--muted); font-family: var(--mono); }
+.pf-no-inno { font-size: .78rem; color: var(--muted); font-style: italic; padding: 2px 0; }
+.pf-arrow-sep { display: flex; justify-content: center; padding: 1px 0; }
+
+/* Pig flow stats */
+.pf-stats { display: grid; grid-template-columns: repeat(4,1fr); gap: .75rem; margin-bottom: 2rem; }
+.pf-stat { background: var(--card); border: 1px solid var(--border); border-radius: 7px; padding: .9rem 1rem; }
+.pf-stat-label { font-family: var(--mono); font-size: 9px; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 3px; }
+.pf-stat-value { font-size: 1.1rem; font-weight: 700; color: var(--text); font-family: var(--mono); }
+
+/* Pig flow legend */
+.pf-legend { display: flex; gap: 1.5rem; flex-wrap: wrap; margin-bottom: 1.25rem; }
+.pf-legend-item { display: flex; align-items: center; gap: 7px; font-size: .78rem; color: var(--muted2); }
+.pf-l-dot { width: 9px; height: 9px; border-radius: 50%; }
+
+/* Pig flow modal */
+.pf-modal-overlay {
+  display: none; position: fixed; inset: 0;
+  background: rgba(0,0,0,.35); z-index: 700;
+  align-items: center; justify-content: center; padding: 20px;
+  backdrop-filter: blur(2px);
+}
+.pf-modal-overlay.open { display: flex; }
+.pf-modal {
+  background: var(--card); border: 1px solid var(--border2); border-radius: 10px;
+  width: 100%; max-width: 480px; max-height: 88vh; overflow-y: auto;
+  box-shadow: 0 8px 32px rgba(0,0,0,.15);
+}
+.pf-modal-top { height: 4px; border-radius: 10px 10px 0 0; }
+.pf-modal-body { padding: 1.25rem 1.25rem 1.5rem; }
+.pf-modal-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 10px; }
+.pf-modal-title { font-size: 1rem; font-weight: 700; color: var(--text); line-height: 1.3; }
+.pf-modal-close { background: none; border: none; cursor: pointer; font-size: 1rem; color: var(--muted2); padding: 2px; flex-shrink: 0; }
+.pf-modal-close:hover { color: var(--text); }
+.pf-status-pill { display: inline-flex; align-items: center; gap: 6px; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; margin-bottom: 12px; }
+.pf-modal-desc { font-size: .83rem; color: var(--muted2); line-height: 1.65; margin-bottom: 12px; }
+.pf-modal-bullets { padding-left: 16px; }
+.pf-modal-bullets li { font-size: .83rem; color: var(--muted2); line-height: 1.75; }
+.pf-stage-tags { display: flex; flex-wrap: wrap; gap: 5px; margin-top: 2px; }
+.pf-stage-tag { font-family: var(--mono); font-size: 10px; padding: 2px 8px; border-radius: 4px; background: var(--bg3); color: var(--muted2); border: 1px solid var(--border); }
+
+@media(max-width:860px) { .pf-stats { grid-template-columns: repeat(2,1fr); } }
 </style>
 </head>
 <body>
@@ -773,6 +858,7 @@ body.edit-mode [contenteditable="true"]:not(:focus) {
   <a class="sb-link active" href="#overview"><span class="sb-pip pip-r"></span>Workstream Overview</a>
   <a class="sb-link" href="#roi"><span class="sb-pip pip-r"></span>ROI & Value</a>
   <a class="sb-link" href="#matrix"><span class="sb-pip pip-b"></span>Theme Alignment</a>
+  <a class="sb-link" href="#pigflow"><span class="sb-pip pip-g"></span>Pig Flow</a>
 
   <div class="sb-sect">Sep 2025 Site Visit</div>
   <a class="sb-link" href="#ws" onclick="showWS('sepvisit',null)"><span class="sb-pip pip-b"></span>Innovation Readout</a>
@@ -919,7 +1005,7 @@ body.edit-mode [contenteditable="true"]:not(:focus) {
         <div class="ov-tile-name">RealWear Wearable Devices</div>
         <span class="pill p-m">⊘ Evaluated · Not Viable</span>
       </div>
-      <div class="ov-tile-desc">Head-mounted display devices tested in real CF metal barn environments by Woody's team through December 2025.</div>
+      <div class="ov-tile-desc">Head-mounted display devices tested in real CF metal barn environments by Woody\'s team through December 2025.</div>
       <ul class="ov-tile-roi">
         <li>RF interference from metal barn construction caused performance degradation — identified before procurement</li>
         <li>Prevented a potentially large failed enterprise rollout; findings documented</li>
@@ -1007,7 +1093,7 @@ body.edit-mode [contenteditable="true"]:not(:focus) {
     <div class="roi-card"><div class="roi-bar bar-b"></div>
       <div class="roi-label">RealWear · Risk Avoided</div>
       <div class="roi-val">Investment <em>protected</em></div>
-      <div class="roi-note">RF interference from metal barn construction caused significant performance degradation. Identified in real conditions during Woody's team testing, before any enterprise purchase. Findings documented for future reference.</div>
+      <div class="roi-note">RF interference from metal barn construction caused significant performance degradation. Identified in real conditions during Woody\'s team testing, before any enterprise purchase. Findings documented for future reference.</div>
     </div>
     <div class="roi-card"><div class="roi-bar bar-r"></div>
       <div class="roi-label">Drone / LiDAR · Pricing</div>
@@ -1108,6 +1194,49 @@ body.edit-mode [contenteditable="true"]:not(:focus) {
   </div>
 </section>
 
+
+<div class="divider"></div>
+
+<!-- ── PIG FLOW ── -->
+<section class="sec" id="pigflow">
+  <div class="eyebrow fade">Operations</div>
+  <h2 class="fade">Lifecycle Pig Flow</h2>
+  <p class="section-lead fade">Full pig lifecycle from insemination to market. Expand any stage to see mortality causes and the innovations actively working to address them.</p>
+
+  <div class="pf-stats fade">
+    <div class="pf-stat"><div class="pf-stat-label">Total cycle</div><div class="pf-stat-value">~183 days</div></div>
+    <div class="pf-stat"><div class="pf-stat-label">Market weight</div><div class="pf-stat-value">~280 lb</div></div>
+    <div class="pf-stat"><div class="pf-stat-label">Typical mortality</div><div class="pf-stat-value">8–12%</div></div>
+    <div class="pf-stat"><div class="pf-stat-label">Active initiatives</div><div class="pf-stat-value" id="pfActiveCount">—</div></div>
+  </div>
+
+  <div class="pf-legend fade">
+    <div class="pf-legend-item"><span class="pf-l-dot" style="background:#1D9E75;"></span>Low mortality risk</div>
+    <div class="pf-legend-item"><span class="pf-l-dot" style="background:var(--amber);"></span>Moderate mortality risk</div>
+    <div class="pf-legend-item"><span class="pf-l-dot" style="background:var(--red);"></span>High mortality risk</div>
+  </div>
+
+  <div id="pfStages"></div>
+</section>
+
+<!-- PIG FLOW MODAL -->
+<div class="pf-modal-overlay" id="pfModal" onclick="pfHandleOverlay(event)">
+  <div class="pf-modal">
+    <div class="pf-modal-top" id="pfModalBar"></div>
+    <div class="pf-modal-body">
+      <div class="pf-modal-head">
+        <div class="pf-modal-title" id="pfModalTitle"></div>
+        <button class="pf-modal-close" onclick="pfCloseModal()">✕</button>
+      </div>
+      <div id="pfModalStatus"></div>
+      <div class="pf-modal-desc" id="pfModalDesc"></div>
+      <div class="pf-section-label">Key updates</div>
+      <ul class="pf-modal-bullets" id="pfModalBullets"></ul>
+      <div class="pf-section-label" style="margin-top:14px;">Addresses stages</div>
+      <div class="pf-stage-tags" id="pfModalStages"></div>
+    </div>
+  </div>
+</div>
 
 <div class="divider"></div>
 
@@ -1414,7 +1543,7 @@ body.edit-mode [contenteditable="true"]:not(:focus) {
       <div class="ws-panel" id="ws-realwear">
         <div class="ws-hdr">
           <div class="ws-top"><div class="ws-title">RealWear Wearable Devices</div><span class="pill p-b">⊘ Evaluated · Not Viable</span></div>
-          <div class="ws-desc">Head-mounted display devices tested by Woody's team in actual CF metal barn environments through December 2025. RF interference from barn metal construction caused significant wireless performance degradation — not solvable with firmware changes. Pausing further pursuit. Finding directly led to validating Plaud NotePin as the alternative approach.</div>
+          <div class="ws-desc">Head-mounted display devices tested by Woody\'s team in actual CF metal barn environments through December 2025. RF interference from barn metal construction caused significant wireless performance degradation — not solvable with firmware changes. Pausing further pursuit. Finding directly led to validating Plaud NotePin as the alternative approach.</div>
           <div class="ws-metrics">
             <div class="wm"><div class="wm-val r">Fail</div><div class="wm-key">Metal Barn RF</div></div>
             <div class="wm"><div class="wm-val">✓</div><div class="wm-key">Risk Avoided</div></div>
@@ -1423,7 +1552,7 @@ body.edit-mode [contenteditable="true"]:not(:focus) {
         </div>
         <div class="ws-2col">
           <div class="ws-block"><div class="ws-blabel">What Was Found</div><ul>
-            <li>Mayank met with RealWear Nov 5; device deployed with Woody's team</li>
+            <li>Mayank met with RealWear Nov 5; device deployed with Woody\'s team</li>
             <li>Full barn testing through first week of December 2025</li>
             <li>Metal barn construction creates RF shielding and multipath interference</li>
             <li>Core RealWear functionality depends on wireless connectivity — degraded significantly</li>
@@ -1646,7 +1775,7 @@ document.querySelectorAll('.roi-card, .next-card, .fade, .ov-tile').forEach((el,
 });
 
 /* ── SIDEBAR ACTIVE ── */
-const secIds = ['overview','roi','matrix','ws','arch','next','log'];
+const secIds = ['overview','roi','matrix','pigflow','ws','arch','next','log'];
 const sbLinks = document.querySelectorAll('.sidebar .sb-link[href^="#"]');
 const secObs = new IntersectionObserver(e => {
   e.forEach(x => {
@@ -1844,6 +1973,7 @@ function showApp() {
   }
   loadMatrixData();
   loadSavedContent();
+  pfRender();
 }
 
 async function submitAuthPassword() {
@@ -2514,6 +2644,156 @@ document.addEventListener('keydown', e => {
     closeDrawer();
   }
 });
+
+
+/* ── PIG FLOW ── */
+const PF_STATUS = {
+  active:    { label:'Active · Adopted',            dot:'#1D9E75', bar:'#1D9E75', bg:'#E8F7F2', color:'#085041' },
+  pilot:     { label:'Pilot Ready · Launching Soon',dot:'#378ADD', bar:'#378ADD', bg:'#E5F0FC', color:'#1A4A7A' },
+  legal:     { label:'Agreement in Legal',          dot:'#7F77DD', bar:'#7F77DD', bg:'#EEEDF8', color:'#3A337A' },
+  cost:      { label:'Cost Model Phase',            dot:'#BA7517', bar:'#BA7517', bg:'#FBF0DC', color:'#633806' },
+  complete:  { label:'Complete',                    dot:'#888780', bar:'#888780', bg:'#F0EFEC', color:'#4A4840' },
+  research:  { label:'Research Phase',              dot:'#D85A30', bar:'#D85A30', bg:'#FAF0EB', color:'#6A2A10' },
+  notviable: { label:'Evaluated · Not Viable',      dot:'#C93F3E', bar:'#C93F3E', bg:'#FCEAEA', color:'#7A1F1F' },
+};
+
+const PF_INNOVATIONS = [
+  { id:'jotforms', title:'JotForms Digital Data Capture', status:'active',
+    desc:'Offline-capable digital forms replacing paper vet logs across barn operations. Team trained and now self-sufficient.',
+    bullets:['160+ structured submissions captured to date','Team builds new forms independently — no ongoing Vation support needed','Form schema = Oracle/ERP integration spec; 160+ records = AI training corpus'],
+    stages:['Farrowing','Pre-weaning','Nursery','Grow-finish'] },
+  { id:'plaud', title:'Hands-Free AI (Plaud NotePin)', status:'pilot',
+    desc:'Workers speak observations while in the field — audio is transcribed, translated, and parsed into structured output automatically.',
+    bullets:['Onsite POC validated Jan 2026 — strong potential confirmed','6–10 device pilot scoped; SOW complete; IP finalized, security cleared','13+ use cases identified; Plaud SDK launching May 12 for deeper integration'],
+    stages:['Farrowing','Pre-weaning','Nursery','Grow-finish'] },
+  { id:'aspra', title:'Air Filtration (ASPRA)', status:'cost',
+    desc:'Electrostatic precipitation technology to reduce airborne pathogen transmission between barn facilities.',
+    bullets:['ASPRA onsite validation at CF completed March 2026 — initial results positive','Disease outbreak cost per site can reach hundreds of thousands in mortality + treatment','44+ farms in scope; full TCO model built with Phil and Sasha'],
+    stages:['Weaning transition','Nursery','Grow-finish','Farrowing'] },
+  { id:'zeitview', title:'Drone / LiDAR (Zeitview)', status:'legal',
+    desc:'RGB + thermal drone scanning of all farm property to replace manual walk-around site assessments.',
+    bullets:['$2,500/site pricing independently validated before any commitment signed','400+ farm sites in scope — replaces expensive annual staff travel assessments','Zeitview operator agreement sent to CF legal April 1 — pilot ready to launch'],
+    stages:['Gestation','Grow-finish'] },
+  { id:'rfid', title:'RFID Tracking', status:'complete',
+    desc:'Full vendor evaluation of RFID tracking solutions. Device configured and delivered to field team for validation.',
+    bullets:['RayFine and Honeywell both evaluated — best fit identified and configured','Android 13 compatibility issue resolved before any enterprise rollout','CF now manages vendor relationship directly — no Vation dependency for reorders'],
+    stages:['Farrowing','Pre-weaning','Nursery','Grow-finish'] },
+  { id:'realwear', title:'RealWear Wearable Devices', status:'notviable',
+    desc:'Head-mounted display devices tested in real CF metal barn environments by Woody\'s team through December 2025.',
+    bullets:['RF interference from metal barn construction caused performance degradation — identified before procurement','Prevented a potentially large failed enterprise rollout; findings documented','Finding directly led to selecting Plaud NotePin, which passed the same conditions'],
+    stages:['Farrowing','Nursery'] },
+  { id:'robotics', title:'Robotics Research', status:'research',
+    desc:'Market scan of robotics solutions applicable to hog farm operations. 10+ vendors screened; RoboForce identified as top candidate.',
+    bullets:['10+ solutions screened across agricultural robotics landscape','RoboForce profiled as highest-potential fit for CF operations','Positioned for activation once drone pilot cadence is established'],
+    stages:['Nursery','Grow-finish'] },
+];
+
+const PF_STAGES = [
+  { title:'Breeding & insemination', days:'Day 0', risk:'green', mort:'1–2%',
+    desc:'Sows are bred via AI or natural service. Conception rates are tracked closely — repeat services indicate issues with sow condition or semen quality.',
+    risks:['Poor conception from heat stress or BCS issues','Gilt immaturity reducing farrowing rates','Semen quality failures'], innovations:[] },
+  { title:'Gestation', days:'Days 0–114', risk:'green', mort:'1–3%',
+    desc:'Sows housed in gestation units. Fetal losses can occur in early gestation (days 1–35) or late. Nutrition and stress management are key.',
+    risks:['Early embryonic death (days 1–35)','Abortions from PRRS, parvovirus, leptospirosis','Late-term mummies or stillbirths'], innovations:['zeitview'] },
+  { title:'Farrowing', days:'Days 114–121', risk:'red', mort:'10–15% of litter',
+    desc:'The highest mortality window. Piglet losses from crushing, low birth weight, starvation, and chilling. Sow supervision critical 24–48 hrs post-farrowing.',
+    risks:['Overlays / crushing by sow (most common)','Low birth weight / runts failing to thrive','Stillbirths and mummies','MMA reducing milk supply','Chilling in cold farrowing rooms'], innovations:['jotforms','plaud','rfid'] },
+  { title:'Pre-weaning (lactation)', days:'Days 1–21', risk:'red', mort:'5–10% of live-born',
+    desc:'Piglets remain with sow for 3 weeks. Scours, crushing, and teat competition are the main killers. Split suckling and cross-fostering help balance litters.',
+    risks:['E. coli scours (Days 1–4)','Rotavirus / TGE diarrhea','Streptococcal meningitis','Iron deficiency anemia','Small piglets losing access to teats'], innovations:['jotforms','plaud','rfid'] },
+  { title:'Weaning transition', days:'Days 21–28', risk:'red', mort:'2–5%',
+    desc:'One of the most stressful events in the pig&#39;s life. Separation from sow, new environment, switch to solid feed. PMWS peaks here.',
+    risks:['Post-weaning diarrhea (PWD) — E. coli','PCV2 / PMWS','Stress-induced immune suppression','Mixing litters spreading disease','Feed refusal / failure to thrive'], innovations:['aspra','jotforms','plaud'] },
+  { title:'Nursery', days:'Days 28–70', risk:'amber', mort:'1–3%',
+    desc:'Pigs grow from ~13 lb to ~50 lb. Respiratory disease grows as a concern. All-in/all-out management and sanitation critical.',
+    risks:['PRRS','Mycoplasma pneumonia','Actinobacillus pleuropneumoniae (App)','Influenza A / SIV','Rectal prolapse in crowded conditions'], innovations:['aspra','jotforms','plaud','rfid','robotics'] },
+  { title:'Grow-finish', days:'Days 70–160', risk:'amber', mort:'1–2%',
+    desc:'Pigs grow from ~50 lb to market weight (~280 lb). Lameness, hernias, and late respiratory disease still occur. Feed conversion is the key metric.',
+    risks:['Lameness / leg injuries','Inguinal / scrotal hernias','Late-stage pneumonia / pleuritis','Gastric ulcers from fine-ground feed','Tail biting leading to septicemia'], innovations:['aspra','jotforms','plaud','rfid','zeitview','robotics'] },
+  { title:'Market / slaughter', days:'~Day 180–183', risk:'green', mort:'< 0.5%',
+    desc:'Pigs reach target market weight. Transport stress (PSE) and DOAs are the main concerns at this stage.',
+    risks:['Transport stress / PSE (pale soft exudative pork)','Dead on arrival (DOA) from handling or mixing','Bruising from loading/unloading injuries'], innovations:[] },
+];
+
+let pfOpenIdx = null;
+
+const arrowSVG = `<svg width="20" height="16" viewBox="0 0 20 16" fill="none"><line x1="10" y1="0" x2="10" y2="10" stroke="var(--border2)" stroke-width="1.5"/><polyline points="5,8 10,14 15,8" stroke="var(--border2)" stroke-width="1.5" fill="none" stroke-linejoin="round"/></svg>`;
+
+function pfGetInno(id) { return PF_INNOVATIONS.find(i => i.id === id); }
+
+function pfRenderBadge(id) {
+  const inn = pfGetInno(id);
+  if (!inn) return '';
+  const s = PF_STATUS[inn.status];
+  return `<button class="pf-inno-badge" onclick="pfOpenModal('${id}',event)">
+    <span class="pf-inno-dot" style="background:${s.dot};"></span>
+    <span>${inn.title}</span>
+    <span class="pf-inno-status">${s.label}</span>
+  </button>`;
+}
+
+function pfRender() {
+  const container = document.getElementById('pfStages');
+  if (!container) return;
+  const riskBar  = { green:'pf-rb-green', amber:'pf-rb-amber', red:'pf-rb-red' };
+  const mortCls  = { green:'pf-mort-green', amber:'pf-mort-amber', red:'pf-mort-red' };
+  container.innerHTML = PF_STAGES.map((s, i) => `
+    ${i > 0 ? `<div class="pf-arrow-sep">${arrowSVG}</div>` : ''}
+    <div class="pf-stage-card${pfOpenIdx === i ? ' pf-open' : ''}" id="pf-stage-${i}">
+      <div class="pf-stage-header" onclick="pfToggle(${i})">
+        <div class="pf-risk-bar ${riskBar[s.risk]}"></div>
+        <div class="pf-stage-name">${s.title}</div>
+        <div class="pf-stage-days">${s.days}</div>
+        <div class="pf-stage-mort ${mortCls[s.risk]}">${s.mort}</div>
+        <div class="pf-chevron"><svg width="14" height="14" viewBox="0 0 14 14"><polyline points="2,4 7,10 12,4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg></div>
+      </div>
+      <div class="pf-stage-detail">
+        <div class="pf-detail-desc">${s.desc}</div>
+        <div class="pf-section-label">Key mortality causes</div>
+        <ul class="pf-risk-list">${s.risks.map(r => `<li>${r}</li>`).join('')}</ul>
+        <div class="pf-section-label" style="margin-top:12px;">Innovations addressing this stage</div>
+        ${s.innovations.length
+          ? `<div class="pf-inno-list">${s.innovations.map(pfRenderBadge).join('')}</div>`
+          : `<div class="pf-no-inno">No active innovations mapped to this stage yet.</div>`}
+      </div>
+    </div>
+  `).join('');
+
+  const active = PF_INNOVATIONS.filter(i => i.status === 'active' || i.status === 'pilot').length;
+  const el = document.getElementById('pfActiveCount');
+  if (el) el.textContent = active + ' initiatives';
+}
+
+function pfToggle(i) {
+  pfOpenIdx = (pfOpenIdx === i) ? null : i;
+  pfRender();
+}
+
+function pfOpenModal(id, e) {
+  e.stopPropagation();
+  const inn = pfGetInno(id);
+  const s = PF_STATUS[inn.status];
+  document.getElementById('pfModalBar').style.background = s.bar;
+  document.getElementById('pfModalTitle').textContent = inn.title;
+  document.getElementById('pfModalStatus').innerHTML =
+    `<div class="pf-status-pill" style="background:${s.bg};color:${s.color};">
+      <span class="pf-inno-dot" style="background:${s.dot};"></span>${s.label}
+    </div>`;
+  document.getElementById('pfModalDesc').textContent = inn.desc;
+  document.getElementById('pfModalBullets').innerHTML = inn.bullets.map(b => `<li>${b}</li>`).join('');
+  document.getElementById('pfModalStages').innerHTML = inn.stages.map(st => `<span class="pf-stage-tag">${st}</span>`).join('');
+  document.getElementById('pfModal').classList.add('open');
+}
+
+function pfCloseModal() {
+  document.getElementById('pfModal').classList.remove('open');
+}
+
+function pfHandleOverlay(e) {
+  if (e.target === document.getElementById('pfModal')) pfCloseModal();
+}
+
+// Initialize pig flow when app loads
 
 async function loadSavedContent() {
   try {
