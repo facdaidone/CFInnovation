@@ -610,6 +610,7 @@ body.edit-mode [contenteditable="true"]:not(:focus) {
   <div class="sb-sect">Overview</div>
   <a class="sb-link active" href="#overview"><span class="sb-pip pip-r"></span>Workstream Overview</a>
   <a class="sb-link" href="#roi"><span class="sb-pip pip-r"></span>ROI & Value</a>
+  <a class="sb-link" href="#matrix"><span class="sb-pip pip-b"></span>Theme Alignment</a>
 
   <div class="sb-sect">Sep 2025 Site Visit</div>
   <a class="sb-link" href="#ws" onclick="showWS('sepvisit',null)"><span class="sb-pip pip-b"></span>Innovation Readout</a>
@@ -868,6 +869,163 @@ body.edit-mode [contenteditable="true"]:not(:focus) {
     </div>
   </div>
 </section>
+
+<div class="divider"></div>
+
+<!-- ── INNOVATION THEMES MATRIX ── -->
+<section class="sec sec-alt" id="matrix">
+  <div class="eyebrow fade">Strategic Alignment</div>
+  <h2 class="fade">Innovation Themes Matrix</h2>
+  <p class="section-lead fade">How each initiative maps to the six 2026 Innovation Themes. Initiatives progress from research through active execution to completion. New requests from the queue appear at the bottom pending approval.</p>
+
+  <div class="theme-legend fade">
+    <div class="theme-legend-item"><div class="theme-legend-dot" style="background:#ED193A;"></div>Consistency</div>
+    <div class="theme-legend-item"><div class="theme-legend-dot" style="background:#1e40af;"></div>Observability</div>
+    <div class="theme-legend-item"><div class="theme-legend-dot" style="background:#15803d;"></div>Connectivity</div>
+    <div class="theme-legend-item"><div class="theme-legend-dot" style="background:#92400e;"></div>Throughput & Efficiency</div>
+    <div class="theme-legend-item"><div class="theme-legend-dot" style="background:#7c3aed;"></div>Safety & Well-Being</div>
+    <div class="theme-legend-item"><div class="theme-legend-dot" style="background:#0369a1;"></div>Sustainability & Traceability</div>
+  </div>
+
+  <div class="matrix-wrap fade">
+    <table class="matrix-table">
+      <thead>
+        <tr>
+          <th style="width:220px;">Initiative</th>
+          <th style="width:90px;">Status</th>
+          <th class="theme-col" title="Consistency">Consistency</th>
+          <th class="theme-col" title="Observability">Observability</th>
+          <th class="theme-col" title="Connectivity">Connectivity</th>
+          <th class="theme-col" title="Throughput &amp; Efficiency">Throughput</th>
+          <th class="theme-col" title="Safety &amp; Well-Being">Safety</th>
+          <th class="theme-col" title="Sustainability &amp; Traceability">Sustainability</th>
+        </tr>
+      </thead>
+      <tbody id="matrixBody">
+        <!-- Active / In Progress -->
+        <tr><td colspan="8" class="m-group-label">Active Workstreams</td></tr>
+
+        <tr>
+          <td><div class="m-init-name">JotForms Digital Data Capture</div><div class="m-init-sub">Digital form system — adopted</div></td>
+          <td><span class="m-status ms-active">● Active</span></td>
+          <td class="m-dot-cell"></td>
+          <td class="m-dot-cell"><span class="m-dot obs"></span></td>
+          <td class="m-dot-cell"><span class="m-dot con"></span></td>
+          <td class="m-dot-cell"><span class="m-dot thr"></span></td>
+          <td class="m-dot-cell"></td>
+          <td class="m-dot-cell"></td>
+        </tr>
+
+        <tr>
+          <td><div class="m-init-name">Hands-Free AI (Plaud NotePin)</div><div class="m-init-sub">Voice capture pilot — launching soon</div></td>
+          <td><span class="m-status ms-active">↗ Pilot Ready</span></td>
+          <td class="m-dot-cell"></td>
+          <td class="m-dot-cell"><span class="m-dot obs"></span></td>
+          <td class="m-dot-cell"><span class="m-dot con"></span></td>
+          <td class="m-dot-cell"><span class="m-dot thr"></span></td>
+          <td class="m-dot-cell"></td>
+          <td class="m-dot-cell"></td>
+        </tr>
+
+        <tr>
+          <td><div class="m-init-name">Air Filtration (ASPRA)</div><div class="m-init-sub">Pathogen reduction — cost model phase</div></td>
+          <td><span class="m-status ms-research">◐ In Progress</span></td>
+          <td class="m-dot-cell"><span class="m-dot"></span></td>
+          <td class="m-dot-cell"></td>
+          <td class="m-dot-cell"></td>
+          <td class="m-dot-cell"></td>
+          <td class="m-dot-cell"><span class="m-dot saf"></span></td>
+          <td class="m-dot-cell"><span class="m-dot sus"></span></td>
+        </tr>
+
+        <tr>
+          <td><div class="m-init-name">Drone / LiDAR (Zeitview)</div><div class="m-init-sub">Property assessment — agreement in legal</div></td>
+          <td><span class="m-status ms-active">↗ Near Launch</span></td>
+          <td class="m-dot-cell"></td>
+          <td class="m-dot-cell"><span class="m-dot obs"></span></td>
+          <td class="m-dot-cell"></td>
+          <td class="m-dot-cell"><span class="m-dot thr"></span></td>
+          <td class="m-dot-cell"></td>
+          <td class="m-dot-cell"></td>
+        </tr>
+
+        <tr>
+          <td><div class="m-init-name">Robotics Research</div><div class="m-init-sub">Agricultural robotics — vendor evaluation</div></td>
+          <td><span class="m-status ms-research">◐ Research</span></td>
+          <td class="m-dot-cell"></td>
+          <td class="m-dot-cell"></td>
+          <td class="m-dot-cell"></td>
+          <td class="m-dot-cell"><span class="m-dot thr"></span></td>
+          <td class="m-dot-cell"><span class="m-dot saf"></span></td>
+          <td class="m-dot-cell"></td>
+        </tr>
+
+        <tr>
+          <td><div class="m-init-name">Drone-Based Pig Marking</div><div class="m-init-sub">Identification system — vendor evaluation</div></td>
+          <td><span class="m-status ms-research">◐ Research</span></td>
+          <td class="m-dot-cell"><span class="m-dot"></span></td>
+          <td class="m-dot-cell"><span class="m-dot obs"></span></td>
+          <td class="m-dot-cell"></td>
+          <td class="m-dot-cell"><span class="m-dot thr"></span></td>
+          <td class="m-dot-cell"></td>
+          <td class="m-dot-cell"></td>
+        </tr>
+
+        <tr>
+          <td><div class="m-init-name">Pit Manure Research</div><div class="m-init-sub">Pit management optimization — awaiting CF feedback</div></td>
+          <td><span class="m-status ms-research">◑ On Hold</span></td>
+          <td class="m-dot-cell"></td>
+          <td class="m-dot-cell"><span class="m-dot obs"></span></td>
+          <td class="m-dot-cell"></td>
+          <td class="m-dot-cell"></td>
+          <td class="m-dot-cell"></td>
+          <td class="m-dot-cell"><span class="m-dot sus"></span></td>
+        </tr>
+
+        <!-- Completed -->
+        <tr><td colspan="8" class="m-group-label">Completed</td></tr>
+
+        <tr>
+          <td><div class="m-init-name">RFID Tracking</div><div class="m-init-sub">Vendor evaluation — complete</div></td>
+          <td><span class="m-status ms-complete">✓ Complete</span></td>
+          <td class="m-dot-cell"></td>
+          <td class="m-dot-cell"><span class="m-dot obs"></span></td>
+          <td class="m-dot-cell"><span class="m-dot con"></span></td>
+          <td class="m-dot-cell"></td>
+          <td class="m-dot-cell"></td>
+          <td class="m-dot-cell"></td>
+        </tr>
+
+        <tr>
+          <td><div class="m-init-name">RealWear Wearable Devices</div><div class="m-init-sub">Field testing — evaluated, not viable</div></td>
+          <td><span class="m-status ms-paused">⊘ Not Viable</span></td>
+          <td class="m-dot-cell"></td>
+          <td class="m-dot-cell"></td>
+          <td class="m-dot-cell"><span class="m-dot con"></span></td>
+          <td class="m-dot-cell"><span class="m-dot thr"></span></td>
+          <td class="m-dot-cell"></td>
+          <td class="m-dot-cell"></td>
+        </tr>
+
+        <tr>
+          <td><div class="m-init-name">September 2025 Visit — Research Readout</div><div class="m-init-sub">Oracle OCI + 2026 Innovation Themes delivered</div></td>
+          <td><span class="m-status ms-complete">✓ Delivered</span></td>
+          <td class="m-dot-cell"><span class="m-dot"></span></td>
+          <td class="m-dot-cell"><span class="m-dot obs"></span></td>
+          <td class="m-dot-cell"><span class="m-dot con"></span></td>
+          <td class="m-dot-cell"><span class="m-dot thr"></span></td>
+          <td class="m-dot-cell"><span class="m-dot saf"></span></td>
+          <td class="m-dot-cell"><span class="m-dot sus"></span></td>
+        </tr>
+
+        <!-- Pending requests injected by JS -->
+        <tr id="matrixPendingGroup" style="display:none;"><td colspan="8" class="m-group-label">New Requests — Pending Approval</td></tr>
+        <tbody id="matrixPendingRows"></tbody>
+      </tbody>
+    </table>
+  </div>
+</section>
+
 
 <div class="divider"></div>
 
@@ -1406,7 +1564,7 @@ document.querySelectorAll('.roi-card, .next-card, .fade, .ov-tile').forEach((el,
 });
 
 /* ── SIDEBAR ACTIVE ── */
-const secIds = ['overview','roi','ws','arch','next','log'];
+const secIds = ['overview','roi','matrix','ws','arch','next','log'];
 const sbLinks = document.querySelectorAll('.sidebar .sb-link[href^="#"]');
 const secObs = new IntersectionObserver(e => {
   e.forEach(x => {
@@ -1750,6 +1908,7 @@ async function loadRequests() {
     requestsData = queue || [];
     renderRequests();
     updateReqBadge();
+    renderMatrixPending();
   } catch(e) { console.warn('Could not load requests:', e); }
 }
 
@@ -1911,6 +2070,49 @@ function toggleAdminPanel() {
   const panel = document.getElementById('adminPanel');
   panel.style.display = panel.style.display === 'none' ? 'block' : 'none';
   if (panel.style.display === 'block') loadAdminSettings();
+}
+
+
+/* ── MATRIX PENDING REQUESTS ── */
+function renderMatrixPending() {
+  const groupRow = document.getElementById('matrixPendingGroup');
+  const tbody = document.getElementById('matrixPendingRows');
+  if (!groupRow || !tbody) return;
+
+  const pending = requestsData.filter(r => r.status === 'pending' || r.status === 'reviewing');
+  if (!pending.length) {
+    groupRow.style.display = 'none';
+    tbody.innerHTML = '';
+    return;
+  }
+
+  groupRow.style.display = '';
+
+  const THEME_COLS = ['consistency','observability','connectivity','throughput','safety','sustainability'];
+  const DOT_CLASS = {
+    consistency: '',
+    observability: 'obs',
+    connectivity: 'con',
+    throughput: 'thr',
+    safety: 'saf',
+    sustainability: 'sus',
+  };
+
+  tbody.innerHTML = pending.map(r => {
+    const themeCells = THEME_COLS.map(t => {
+      const has = (r.themes || []).includes(t);
+      return `<td class="m-dot-cell">${has ? `<span class="m-dot ${DOT_CLASS[t]}"></span>` : ''}</td>`;
+    }).join('');
+    const date = new Date(r.submittedAt).toLocaleDateString('en-US',{month:'short',day:'numeric'});
+    return `<tr>
+      <td>
+        <div class="m-init-name">${r.title}</div>
+        <div class="m-init-sub">${r.submitter || 'Anonymous'} · submitted ${date}</div>
+      </td>
+      <td><span class="m-status ms-pending">● Pending</span></td>
+      ${themeCells}
+    </tr>`;
+  }).join('');
 }
 
 async function loadSavedContent() {
