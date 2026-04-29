@@ -934,11 +934,15 @@ body.edit-mode [contenteditable="true"]:not(:focus) {
   </div>
 
   <!-- Pending requests injected by JS -->
-  <div id="matrixPendingSection" style="display:none;" class="matrix-table-wrap" style="margin-top:1.5rem;">
+  <div id="matrixPendingSection" style="display:none;margin-top:1.5rem;" class="matrix-table-wrap">
     <table class="matrix-tbl">
-      <tbody>
+      <colgroup>
+        <col style="width:280px;">
+        <col><col><col><col><col><col>
+      </colgroup>
+      <thead>
         <tr class="m-group-row" id="matrixPendingGroup"><td colspan="7">New Requests — Pending Approval</td></tr>
-      </tbody>
+      </thead>
       <tbody id="matrixPendingRows"></tbody>
     </table>
   </div>
@@ -2115,6 +2119,22 @@ async function loadMatrixData() {
   renderMatrix();
 }
 
+
+function togglePendingTheme(id, theme) {
+  if (!editMode) return;
+  const r = requestsData.find(x => x.id === id);
+  if (!r) return;
+  const i = (r.themes||[]).indexOf(theme);
+  if (i > -1) r.themes.splice(i, 1);
+  else { r.themes = r.themes || []; r.themes.push(theme); }
+  renderMatrixPending();
+  // Save updated themes to the requests queue
+  fetch('/api/requests', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'x-session-token': sessionToken },
+    body: JSON.stringify({ action: 'updateThemes', id, themes: r.themes, queue: requestsData })
+  }).catch(e => console.warn('Could not save theme:', e));
+}
 /* ── MATRIX PENDING REQUESTS ── */
 function renderMatrixPending() {
   const groupEl = document.getElementById('matrixPendingGroup');
@@ -2135,12 +2155,23 @@ function renderMatrixPending() {
   const THEME_COLS = ['consistency','observability','connectivity','throughput','safety','sustainability'];
   const PIP_CLASS  = { consistency:'mp-con', observability:'mp-obs', connectivity:'mp-link', throughput:'mp-thr', safety:'mp-saf', sustainability:'mp-sus' };
 
+  const isEdit = userRole === 'editor';
   container.innerHTML = pending.map(r => {
     const date = new Date(r.submittedAt).toLocaleDateString('en-US',{month:'short',day:'numeric'});
-    const cells = THEME_COLS.map(t =>
-      `<td class="m-cell" style="text-align:center;">${(r.themes||[]).includes(t) ? `<div class="m-pip ${PIP_CLASS[t]}" style="opacity:.5;margin:auto;"></div>` : ''}</td>`
-    ).join('');
-    return `<tr style="opacity:.75;">
+    const cells = THEME_COLS.map(t => {
+      const active = (r.themes||[]).includes(t);
+      if (isEdit) {
+        return `<td style="text-align:center;vertical-align:middle;">
+          <div onclick="togglePendingTheme('${r.id}','${t}')"
+            title="${active ? 'Remove' : 'Add'} ${t}"
+            style="cursor:pointer;width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;transition:all .15s;${active ? '' : 'border:2px dashed rgba(0,0,0,.2);'}">
+            ${active ? `<div class="m-pip ${PIP_CLASS[t]}" style="width:10px;height:10px;"></div>` : '<span style="font-size:9px;color:rgba(0,0,0,.25);">+</span>'}
+          </div>
+        </td>`;
+      }
+      return `<td style="text-align:center;vertical-align:middle;">${active ? `<div class="m-pip ${PIP_CLASS[t]}" style="margin:auto;"></div>` : ''}</td>`;
+    }).join('');
+    return `<tr>
       <td class="mtbl-info">
         <div class="m-row-name">${r.title}</div>
         <div class="m-row-sub">${r.submitter||'Anonymous'} · submitted ${date}</div>
