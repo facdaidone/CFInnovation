@@ -870,159 +870,226 @@ body.edit-mode [contenteditable="true"]:not(:focus) {
   </div>
 </section>
 
+
 <div class="divider"></div>
 
 <!-- ── INNOVATION THEMES MATRIX ── -->
-<section class="sec sec-alt" id="matrix">
-  <div class="eyebrow fade">Strategic Alignment</div>
-  <h2 class="fade">Innovation Themes Matrix</h2>
-  <p class="section-lead fade">How each initiative maps to the six 2026 Innovation Themes. Initiatives progress from research through active execution to completion. New requests from the queue appear at the bottom pending approval.</p>
+<section class="themes-matrix-section" id="matrix">
+  <div class="themes-eyebrow">Strategic Alignment</div>
+  <h2 class="themes-h2">Innovation Themes Matrix</h2>
+  <p class="themes-lead">Every initiative mapped against the six 2026 Innovation Themes. Coverage reveals where investment is concentrated and where gaps exist.</p>
 
-  <div class="theme-legend fade">
-    <div class="theme-legend-item"><div class="theme-legend-dot" style="background:#ED193A;"></div>Consistency</div>
-    <div class="theme-legend-item"><div class="theme-legend-dot" style="background:#1e40af;"></div>Observability</div>
-    <div class="theme-legend-item"><div class="theme-legend-dot" style="background:#15803d;"></div>Connectivity</div>
-    <div class="theme-legend-item"><div class="theme-legend-dot" style="background:#92400e;"></div>Throughput & Efficiency</div>
-    <div class="theme-legend-item"><div class="theme-legend-dot" style="background:#7c3aed;"></div>Safety & Well-Being</div>
-    <div class="theme-legend-item"><div class="theme-legend-dot" style="background:#0369a1;"></div>Sustainability & Traceability</div>
+  <!-- Theme header -->
+  <div class="themes-header">
+    <div class="themes-header-label">Initiative</div>
+    <div class="theme-header-pill">
+      <div class="theme-header-dot" style="background:#ED193A;box-shadow:0 0 8px #ED193A66;"></div>
+      <div class="theme-header-name">Consistency</div>
+    </div>
+    <div class="theme-header-pill">
+      <div class="theme-header-dot" style="background:#60a5fa;box-shadow:0 0 8px #60a5fa66;"></div>
+      <div class="theme-header-name">Observability</div>
+    </div>
+    <div class="theme-header-pill">
+      <div class="theme-header-dot" style="background:#4ade80;box-shadow:0 0 8px #4ade8066;"></div>
+      <div class="theme-header-name">Connectivity</div>
+    </div>
+    <div class="theme-header-pill">
+      <div class="theme-header-dot" style="background:#fb923c;box-shadow:0 0 8px #fb923c66;"></div>
+      <div class="theme-header-name">Throughput</div>
+    </div>
+    <div class="theme-header-pill">
+      <div class="theme-header-dot" style="background:#c084fc;box-shadow:0 0 8px #c084fc66;"></div>
+      <div class="theme-header-name">Safety</div>
+    </div>
+    <div class="theme-header-pill">
+      <div class="theme-header-dot" style="background:#38bdf8;box-shadow:0 0 8px #38bdf866;"></div>
+      <div class="theme-header-name">Sustainability</div>
+    </div>
   </div>
 
-  <div class="matrix-wrap fade">
-    <table class="matrix-table">
-      <thead>
-        <tr>
-          <th style="width:220px;">Initiative</th>
-          <th style="width:90px;">Status</th>
-          <th class="theme-col" title="Consistency">Consistency</th>
-          <th class="theme-col" title="Observability">Observability</th>
-          <th class="theme-col" title="Connectivity">Connectivity</th>
-          <th class="theme-col" title="Throughput &amp; Efficiency">Throughput</th>
-          <th class="theme-col" title="Safety &amp; Well-Being">Safety</th>
-          <th class="theme-col" title="Sustainability &amp; Traceability">Sustainability</th>
-        </tr>
-      </thead>
-      <tbody id="matrixBody">
-        <!-- Active / In Progress -->
-        <tr><td colspan="8" class="m-group-label">Active Workstreams</td></tr>
+  <!-- Active -->
+  <div class="m-group">Active Workstreams</div>
 
-        <tr>
-          <td><div class="m-init-name">JotForms Digital Data Capture</div><div class="m-init-sub">Digital form system — adopted</div></td>
-          <td><span class="m-status ms-active">● Active</span></td>
-          <td class="m-dot-cell"></td>
-          <td class="m-dot-cell"><span class="m-dot obs"></span></td>
-          <td class="m-dot-cell"><span class="m-dot con"></span></td>
-          <td class="m-dot-cell"><span class="m-dot thr"></span></td>
-          <td class="m-dot-cell"></td>
-          <td class="m-dot-cell"></td>
-        </tr>
+  <div class="m-row">
+    <div class="m-row-info">
+      <div class="m-row-name">JotForms Digital Data Capture</div>
+      <div class="m-row-sub">Digital form system · 160+ submissions</div>
+      <div class="m-row-status"><span class="m-badge mb-active">● Active · Adopted</span></div>
+    </div>
+    <div class="m-cell"></div>
+    <div class="m-cell"><div class="m-pip mp-obs"></div></div>
+    <div class="m-cell"><div class="m-pip mp-link"></div></div>
+    <div class="m-cell"><div class="m-pip mp-thr"></div></div>
+    <div class="m-cell"></div>
+    <div class="m-cell"></div>
+  </div>
 
-        <tr>
-          <td><div class="m-init-name">Hands-Free AI (Plaud NotePin)</div><div class="m-init-sub">Voice capture pilot — launching soon</div></td>
-          <td><span class="m-status ms-active">↗ Pilot Ready</span></td>
-          <td class="m-dot-cell"></td>
-          <td class="m-dot-cell"><span class="m-dot obs"></span></td>
-          <td class="m-dot-cell"><span class="m-dot con"></span></td>
-          <td class="m-dot-cell"><span class="m-dot thr"></span></td>
-          <td class="m-dot-cell"></td>
-          <td class="m-dot-cell"></td>
-        </tr>
+  <div class="m-row">
+    <div class="m-row-info">
+      <div class="m-row-name">Hands-Free AI (Plaud NotePin)</div>
+      <div class="m-row-sub">Voice capture · pilot launching soon</div>
+      <div class="m-row-status"><span class="m-badge mb-pilot">↗ Pilot Ready</span></div>
+    </div>
+    <div class="m-cell"></div>
+    <div class="m-cell"><div class="m-pip mp-obs"></div></div>
+    <div class="m-cell"><div class="m-pip mp-link"></div></div>
+    <div class="m-cell"><div class="m-pip mp-thr"></div></div>
+    <div class="m-cell"></div>
+    <div class="m-cell"></div>
+  </div>
 
-        <tr>
-          <td><div class="m-init-name">Air Filtration (ASPRA)</div><div class="m-init-sub">Pathogen reduction — cost model phase</div></td>
-          <td><span class="m-status ms-research">◐ In Progress</span></td>
-          <td class="m-dot-cell"><span class="m-dot"></span></td>
-          <td class="m-dot-cell"></td>
-          <td class="m-dot-cell"></td>
-          <td class="m-dot-cell"></td>
-          <td class="m-dot-cell"><span class="m-dot saf"></span></td>
-          <td class="m-dot-cell"><span class="m-dot sus"></span></td>
-        </tr>
+  <div class="m-row">
+    <div class="m-row-info">
+      <div class="m-row-name">Air Filtration (ASPRA)</div>
+      <div class="m-row-sub">Pathogen reduction · cost model phase</div>
+      <div class="m-row-status"><span class="m-badge mb-research">◐ In Progress</span></div>
+    </div>
+    <div class="m-cell"><div class="m-pip mp-con"></div></div>
+    <div class="m-cell"></div>
+    <div class="m-cell"></div>
+    <div class="m-cell"></div>
+    <div class="m-cell"><div class="m-pip mp-saf"></div></div>
+    <div class="m-cell"><div class="m-pip mp-sus"></div></div>
+  </div>
 
-        <tr>
-          <td><div class="m-init-name">Drone / LiDAR (Zeitview)</div><div class="m-init-sub">Property assessment — agreement in legal</div></td>
-          <td><span class="m-status ms-active">↗ Near Launch</span></td>
-          <td class="m-dot-cell"></td>
-          <td class="m-dot-cell"><span class="m-dot obs"></span></td>
-          <td class="m-dot-cell"></td>
-          <td class="m-dot-cell"><span class="m-dot thr"></span></td>
-          <td class="m-dot-cell"></td>
-          <td class="m-dot-cell"></td>
-        </tr>
+  <div class="m-row">
+    <div class="m-row-info">
+      <div class="m-row-name">Drone / LiDAR (Zeitview)</div>
+      <div class="m-row-sub">Property assessment · agreement in legal</div>
+      <div class="m-row-status"><span class="m-badge mb-pilot">↗ Near Launch</span></div>
+    </div>
+    <div class="m-cell"></div>
+    <div class="m-cell"><div class="m-pip mp-obs"></div></div>
+    <div class="m-cell"></div>
+    <div class="m-cell"><div class="m-pip mp-thr"></div></div>
+    <div class="m-cell"></div>
+    <div class="m-cell"></div>
+  </div>
 
-        <tr>
-          <td><div class="m-init-name">Robotics Research</div><div class="m-init-sub">Agricultural robotics — vendor evaluation</div></td>
-          <td><span class="m-status ms-research">◐ Research</span></td>
-          <td class="m-dot-cell"></td>
-          <td class="m-dot-cell"></td>
-          <td class="m-dot-cell"></td>
-          <td class="m-dot-cell"><span class="m-dot thr"></span></td>
-          <td class="m-dot-cell"><span class="m-dot saf"></span></td>
-          <td class="m-dot-cell"></td>
-        </tr>
+  <div class="m-row">
+    <div class="m-row-info">
+      <div class="m-row-name">Robotics Research</div>
+      <div class="m-row-sub">Agricultural robotics · vendor evaluation</div>
+      <div class="m-row-status"><span class="m-badge mb-research">◐ Research</span></div>
+    </div>
+    <div class="m-cell"></div>
+    <div class="m-cell"></div>
+    <div class="m-cell"></div>
+    <div class="m-cell"><div class="m-pip mp-thr"></div></div>
+    <div class="m-cell"><div class="m-pip mp-saf"></div></div>
+    <div class="m-cell"></div>
+  </div>
 
-        <tr>
-          <td><div class="m-init-name">Drone-Based Pig Marking</div><div class="m-init-sub">Identification system — vendor evaluation</div></td>
-          <td><span class="m-status ms-research">◐ Research</span></td>
-          <td class="m-dot-cell"><span class="m-dot"></span></td>
-          <td class="m-dot-cell"><span class="m-dot obs"></span></td>
-          <td class="m-dot-cell"></td>
-          <td class="m-dot-cell"><span class="m-dot thr"></span></td>
-          <td class="m-dot-cell"></td>
-          <td class="m-dot-cell"></td>
-        </tr>
+  <div class="m-row">
+    <div class="m-row-info">
+      <div class="m-row-name">Drone-Based Pig Marking</div>
+      <div class="m-row-sub">Identification system · vendor evaluation</div>
+      <div class="m-row-status"><span class="m-badge mb-research">◐ Research</span></div>
+    </div>
+    <div class="m-cell"><div class="m-pip mp-con"></div></div>
+    <div class="m-cell"><div class="m-pip mp-obs"></div></div>
+    <div class="m-cell"></div>
+    <div class="m-cell"><div class="m-pip mp-thr"></div></div>
+    <div class="m-cell"></div>
+    <div class="m-cell"></div>
+  </div>
 
-        <tr>
-          <td><div class="m-init-name">Pit Manure Research</div><div class="m-init-sub">Pit management optimization — awaiting CF feedback</div></td>
-          <td><span class="m-status ms-research">◑ On Hold</span></td>
-          <td class="m-dot-cell"></td>
-          <td class="m-dot-cell"><span class="m-dot obs"></span></td>
-          <td class="m-dot-cell"></td>
-          <td class="m-dot-cell"></td>
-          <td class="m-dot-cell"></td>
-          <td class="m-dot-cell"><span class="m-dot sus"></span></td>
-        </tr>
+  <div class="m-row">
+    <div class="m-row-info">
+      <div class="m-row-name">Pit Manure Research</div>
+      <div class="m-row-sub">Pit management optimization · awaiting CF</div>
+      <div class="m-row-status"><span class="m-badge mb-hold">◑ On Hold</span></div>
+    </div>
+    <div class="m-cell"></div>
+    <div class="m-cell"><div class="m-pip mp-obs"></div></div>
+    <div class="m-cell"></div>
+    <div class="m-cell"></div>
+    <div class="m-cell"></div>
+    <div class="m-cell"><div class="m-pip mp-sus"></div></div>
+  </div>
 
-        <!-- Completed -->
-        <tr><td colspan="8" class="m-group-label">Completed</td></tr>
+  <!-- Completed -->
+  <div class="m-group">Completed</div>
 
-        <tr>
-          <td><div class="m-init-name">RFID Tracking</div><div class="m-init-sub">Vendor evaluation — complete</div></td>
-          <td><span class="m-status ms-complete">✓ Complete</span></td>
-          <td class="m-dot-cell"></td>
-          <td class="m-dot-cell"><span class="m-dot obs"></span></td>
-          <td class="m-dot-cell"><span class="m-dot con"></span></td>
-          <td class="m-dot-cell"></td>
-          <td class="m-dot-cell"></td>
-          <td class="m-dot-cell"></td>
-        </tr>
+  <div class="m-row">
+    <div class="m-row-info">
+      <div class="m-row-name">RFID Tracking</div>
+      <div class="m-row-sub">Vendor evaluation complete</div>
+      <div class="m-row-status"><span class="m-badge mb-complete">✓ Complete</span></div>
+    </div>
+    <div class="m-cell"></div>
+    <div class="m-cell"><div class="m-pip mp-obs"></div></div>
+    <div class="m-cell"><div class="m-pip mp-link"></div></div>
+    <div class="m-cell"></div>
+    <div class="m-cell"></div>
+    <div class="m-cell"></div>
+  </div>
 
-        <tr>
-          <td><div class="m-init-name">RealWear Wearable Devices</div><div class="m-init-sub">Field testing — evaluated, not viable</div></td>
-          <td><span class="m-status ms-paused">⊘ Not Viable</span></td>
-          <td class="m-dot-cell"></td>
-          <td class="m-dot-cell"></td>
-          <td class="m-dot-cell"><span class="m-dot con"></span></td>
-          <td class="m-dot-cell"><span class="m-dot thr"></span></td>
-          <td class="m-dot-cell"></td>
-          <td class="m-dot-cell"></td>
-        </tr>
+  <div class="m-row">
+    <div class="m-row-info">
+      <div class="m-row-name">RealWear Wearable Devices</div>
+      <div class="m-row-sub">Field testing · evaluated, not viable</div>
+      <div class="m-row-status"><span class="m-badge mb-notviable">⊘ Not Viable</span></div>
+    </div>
+    <div class="m-cell"></div>
+    <div class="m-cell"></div>
+    <div class="m-cell"><div class="m-pip mp-link"></div></div>
+    <div class="m-cell"><div class="m-pip mp-thr"></div></div>
+    <div class="m-cell"></div>
+    <div class="m-cell"></div>
+  </div>
 
-        <tr>
-          <td><div class="m-init-name">September 2025 Visit — Research Readout</div><div class="m-init-sub">Oracle OCI + 2026 Innovation Themes delivered</div></td>
-          <td><span class="m-status ms-complete">✓ Delivered</span></td>
-          <td class="m-dot-cell"><span class="m-dot"></span></td>
-          <td class="m-dot-cell"><span class="m-dot obs"></span></td>
-          <td class="m-dot-cell"><span class="m-dot con"></span></td>
-          <td class="m-dot-cell"><span class="m-dot thr"></span></td>
-          <td class="m-dot-cell"><span class="m-dot saf"></span></td>
-          <td class="m-dot-cell"><span class="m-dot sus"></span></td>
-        </tr>
+  <div class="m-row">
+    <div class="m-row-info">
+      <div class="m-row-name">September 2025 Visit</div>
+      <div class="m-row-sub">Oracle OCI + 2026 themes delivered</div>
+      <div class="m-row-status"><span class="m-badge mb-complete">✓ Delivered</span></div>
+    </div>
+    <div class="m-cell"><div class="m-pip mp-con"></div></div>
+    <div class="m-cell"><div class="m-pip mp-obs"></div></div>
+    <div class="m-cell"><div class="m-pip mp-link"></div></div>
+    <div class="m-cell"><div class="m-pip mp-thr"></div></div>
+    <div class="m-cell"><div class="m-pip mp-saf"></div></div>
+    <div class="m-cell"><div class="m-pip mp-sus"></div></div>
+  </div>
 
-        <!-- Pending requests injected by JS -->
-        <tr id="matrixPendingGroup" style="display:none;"><td colspan="8" class="m-group-label">New Requests — Pending Approval</td></tr>
-        <tbody id="matrixPendingRows"></tbody>
-      </tbody>
-    </table>
+  <!-- Pending requests injected by JS -->
+  <div id="matrixPendingGroup" style="display:none;" class="m-group">New Requests — Pending Approval</div>
+  <div id="matrixPendingRows"></div>
+
+  <!-- Coverage summary -->
+  <div class="themes-coverage" id="themesCoverage">
+    <div class="cov-item">
+      <div class="cov-label">Consistency</div>
+      <div class="cov-bar-wrap"><div class="cov-bar" style="width:30%;background:#ED193A;box-shadow:0 0 6px #ED193A66;"></div></div>
+      <div class="cov-count" style="color:#ED193A;">3</div>
+    </div>
+    <div class="cov-item">
+      <div class="cov-label">Observability</div>
+      <div class="cov-bar-wrap"><div class="cov-bar" style="width:70%;background:#60a5fa;box-shadow:0 0 6px #60a5fa66;"></div></div>
+      <div class="cov-count" style="color:#60a5fa;">7</div>
+    </div>
+    <div class="cov-item">
+      <div class="cov-label">Connectivity</div>
+      <div class="cov-bar-wrap"><div class="cov-bar" style="width:40%;background:#4ade80;box-shadow:0 0 6px #4ade8066;"></div></div>
+      <div class="cov-count" style="color:#4ade80;">4</div>
+    </div>
+    <div class="cov-item">
+      <div class="cov-label">Throughput</div>
+      <div class="cov-bar-wrap"><div class="cov-bar" style="width:60%;background:#fb923c;box-shadow:0 0 6px #fb923c66;"></div></div>
+      <div class="cov-count" style="color:#fb923c;">6</div>
+    </div>
+    <div class="cov-item">
+      <div class="cov-label">Safety</div>
+      <div class="cov-bar-wrap"><div class="cov-bar" style="width:20%;background:#c084fc;box-shadow:0 0 6px #c084fc66;"></div></div>
+      <div class="cov-count" style="color:#c084fc;">2</div>
+    </div>
+    <div class="cov-item">
+      <div class="cov-label">Sustainability</div>
+      <div class="cov-bar-wrap"><div class="cov-bar" style="width:30%;background:#38bdf8;box-shadow:0 0 6px #38bdf866;"></div></div>
+      <div class="cov-count" style="color:#38bdf8;">3</div>
+    </div>
   </div>
 </section>
 
@@ -2075,43 +2142,34 @@ function toggleAdminPanel() {
 
 /* ── MATRIX PENDING REQUESTS ── */
 function renderMatrixPending() {
-  const groupRow = document.getElementById('matrixPendingGroup');
-  const tbody = document.getElementById('matrixPendingRows');
-  if (!groupRow || !tbody) return;
+  const groupEl = document.getElementById('matrixPendingGroup');
+  const container = document.getElementById('matrixPendingRows');
+  if (!groupEl || !container) return;
 
   const pending = requestsData.filter(r => r.status === 'pending' || r.status === 'reviewing');
   if (!pending.length) {
-    groupRow.style.display = 'none';
-    tbody.innerHTML = '';
+    groupEl.style.display = 'none';
+    container.innerHTML = '';
     return;
   }
-
-  groupRow.style.display = '';
+  groupEl.style.display = '';
 
   const THEME_COLS = ['consistency','observability','connectivity','throughput','safety','sustainability'];
-  const DOT_CLASS = {
-    consistency: '',
-    observability: 'obs',
-    connectivity: 'con',
-    throughput: 'thr',
-    safety: 'saf',
-    sustainability: 'sus',
-  };
+  const PIP_CLASS  = { consistency:'mp-con', observability:'mp-obs', connectivity:'mp-link', throughput:'mp-thr', safety:'mp-saf', sustainability:'mp-sus' };
 
-  tbody.innerHTML = pending.map(r => {
-    const themeCells = THEME_COLS.map(t => {
-      const has = (r.themes || []).includes(t);
-      return `<td class="m-dot-cell">${has ? `<span class="m-dot ${DOT_CLASS[t]}"></span>` : ''}</td>`;
-    }).join('');
+  container.innerHTML = pending.map(r => {
     const date = new Date(r.submittedAt).toLocaleDateString('en-US',{month:'short',day:'numeric'});
-    return `<tr>
-      <td>
-        <div class="m-init-name">${r.title}</div>
-        <div class="m-init-sub">${r.submitter || 'Anonymous'} · submitted ${date}</div>
-      </td>
-      <td><span class="m-status ms-pending">● Pending</span></td>
-      ${themeCells}
-    </tr>`;
+    const cells = THEME_COLS.map(t =>
+      `<div class="m-cell">${(r.themes||[]).includes(t) ? `<div class="m-pip ${PIP_CLASS[t]}" style="opacity:.5;"></div>` : ''}</div>`
+    ).join('');
+    return `<div class="m-row">
+      <div class="m-row-info">
+        <div class="m-row-name" style="opacity:.6;">${r.title}</div>
+        <div class="m-row-sub">${r.submitter||'Anonymous'} · submitted ${date}</div>
+        <div class="m-row-status"><span class="m-badge mb-pending">● Pending Approval</span></div>
+      </div>
+      ${cells}
+    </div>`;
   }).join('');
 }
 
