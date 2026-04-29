@@ -565,6 +565,7 @@ body.edit-mode [contenteditable="true"]:not(:focus) {
 
 /* ── THEMES MATRIX ── */
 .themes-matrix-section { padding: 4.5rem 3.5rem; background: var(--bg); position: relative; }
+.matrix-grid-wrap { display: block; }
 .themes-eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--red); display: flex; align-items: center; gap: 6px; margin-bottom: .6rem; }
 .themes-eyebrow::before { content: '//'; opacity: .4; }
 .themes-h2 { font-size: clamp(1.8rem,3vw,2.6rem); font-weight: 700; line-height: 1.05; letter-spacing: -.02em; margin-bottom: .6rem; color: var(--text); }
@@ -925,6 +926,8 @@ body.edit-mode [contenteditable="true"]:not(:focus) {
   <h2 class="themes-h2">Innovation Themes Matrix</h2>
   <p class="themes-lead">Every initiative mapped against the six 2026 Innovation Themes. Coverage reveals where investment is concentrated and where gaps exist.</p>
 
+  <!-- Matrix grid wrapper -->
+  <div class="matrix-grid-wrap">
   <!-- Theme header -->
   <div class="themes-header">
     <div class="themes-header-label">Initiative</div>
@@ -954,6 +957,7 @@ body.edit-mode [contenteditable="true"]:not(:focus) {
     </div>
   
   <div id="matrixRows"></div>
+  </div><!-- /matrix-grid-wrap -->
 
   <!-- Pending requests injected by JS -->
   <div id="matrixPendingGroup" style="display:none;" class="m-group">New Requests — Pending Approval</div>
@@ -2154,9 +2158,9 @@ function renderMatrixPending() {
     const cells = THEME_COLS.map(t =>
       `<div class="m-cell">${(r.themes||[]).includes(t) ? `<div class="m-pip ${PIP_CLASS[t]}" style="opacity:.5;"></div>` : ''}</div>`
     ).join('');
-    return `<div class="m-row">
+    return `<div class="m-row" style="opacity:.75;">
       <div class="m-row-info">
-        <div class="m-row-name" style="opacity:.6;">${r.title}</div>
+        <div class="m-row-name">${r.title}</div>
         <div class="m-row-sub">${r.submitter||'Anonymous'} · submitted ${date}</div>
         <div class="m-row-status"><span class="m-badge mb-pending">● Pending Approval</span></div>
       </div>
