@@ -565,33 +565,22 @@ body.edit-mode [contenteditable="true"]:not(:focus) {
 
 /* ── THEMES MATRIX ── */
 .themes-matrix-section { padding: 4.5rem 3.5rem; background: var(--bg); position: relative; }
-.matrix-grid-wrap { display: block; }
-.themes-eyebrow { font-family: var(--mono); font-size: 10px; letter-spacing: .16em; text-transform: uppercase; color: var(--red); display: flex; align-items: center; gap: 6px; margin-bottom: .6rem; }
-.themes-eyebrow::before { content: '//'; opacity: .4; }
-.themes-h2 { font-size: clamp(1.8rem,3vw,2.6rem); font-weight: 700; line-height: 1.05; letter-spacing: -.02em; margin-bottom: .6rem; color: var(--text); }
-.themes-lead { font-size: .9rem; color: var(--muted2); line-height: 1.75; max-width: 520px; margin-bottom: 3rem; }
-.themes-header { display: grid; grid-template-columns: 280px repeat(6, 1fr); gap: 0; margin-bottom: .5rem; padding: 0 0 .75rem 0; border-bottom: 1px solid var(--border); }
-.themes-header-label { font-family: var(--mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); display: flex; align-items: flex-end; padding-bottom: 4px; }
-.theme-header-pill { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 0 6px; }
+.matrix-table-wrap { overflow-x: auto; }
+.matrix-tbl { width: 100%; border-collapse: collapse; }
+.matrix-tbl thead th { padding: .6rem 0; border-bottom: 1px solid var(--border); vertical-align: bottom; }
+.mtbl-init { width: 280px; text-align: left; font-family: var(--mono); font-size: 9px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); padding-left: 0 !important; }
+.mtbl-theme { text-align: center; width: calc((100% - 280px) / 6); }
+.matrix-tbl tbody tr { border-bottom: 1px solid rgba(0,0,0,.04); transition: background .15s; }
+.matrix-tbl tbody tr:hover { background: var(--red3); }
+.matrix-tbl tbody tr.m-group-row td { font-family: var(--mono); font-size: 8px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); padding: 1.25rem 0 .4rem; background: none !important; border-bottom: 1px solid var(--border); }
+.matrix-tbl td { padding: .7rem 0; vertical-align: middle; }
+.mtbl-info { padding-right: 1.5rem !important; vertical-align: middle; }
+.theme-header-pill { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 0 4px; }
 .theme-header-dot { width: 10px; height: 10px; border-radius: 50%; flex-shrink: 0; }
-.theme-header-name { font-family: var(--sans); font-size: 11px; font-weight: 600; letter-spacing: .01em; text-transform: none; color: var(--muted2); text-align: center; line-height: 1.4; }
-.m-group { font-family: var(--mono); font-size: 8px; letter-spacing: .16em; text-transform: uppercase; color: var(--muted); padding: 1.25rem 0 .5rem; margin-top: .5rem; display: flex; align-items: center; gap: 10px; }
-.m-group::after { content: ''; flex: 1; height: 1px; background: var(--border); }
-.m-row { display: grid; grid-template-columns: 280px repeat(6, 1fr); gap: 0; padding: .7rem 0; border-bottom: 1px solid var(--border); transition: background .15s; border-radius: 4px; }
-.m-row:hover { background: var(--red3); }
-.m-row-info { padding-right: 1.5rem; }
+.theme-header-name { font-family: var(--sans); font-size: 11px; font-weight: 600; color: var(--muted2); text-align: center; line-height: 1.4; }
 .m-row-name { font-size: .85rem; font-weight: 600; color: var(--text); line-height: 1.3; }
 .m-row-sub { font-size: .72rem; color: var(--muted2); margin-top: 3px; line-height: 1.4; }
 .m-row-status { margin-top: 6px; }
-.m-badge { display: inline-flex; align-items: center; gap: 4px; font-family: var(--mono); font-size: 7.5px; letter-spacing: .07em; text-transform: uppercase; padding: 2px 7px; border-radius: 3px; }
-.mb-active    { background: var(--green2);  color: var(--green);  border: 1px solid rgba(21,128,61,.2); }
-.mb-pilot     { background: var(--red2);    color: var(--red);    border: 1px solid rgba(237,25,58,.2); }
-.mb-research  { background: var(--amber2);  color: var(--amber);  border: 1px solid rgba(146,64,14,.2); }
-.mb-hold      { background: var(--bg3);     color: var(--muted2); border: 1px solid var(--border2); }
-.mb-complete  { background: var(--blue2);   color: var(--blue);   border: 1px solid rgba(30,64,175,.2); }
-.mb-notviable { background: var(--bg3);     color: var(--muted);  border: 1px solid var(--border2); }
-.mb-pending   { background: var(--red2);    color: var(--red);    border: 1px solid rgba(237,25,58,.2); }
-.m-cell { display: flex; align-items: center; justify-content: center; }
 .m-pip { width: 10px; height: 10px; border-radius: 50%; opacity: .85; }
 .mp-con  { background: #ED193A; }
 .mp-obs  { background: #1e40af; }
@@ -926,42 +915,33 @@ body.edit-mode [contenteditable="true"]:not(:focus) {
   <h2 class="themes-h2">Innovation Themes Matrix</h2>
   <p class="themes-lead">Every initiative mapped against the six 2026 Innovation Themes. Coverage reveals where investment is concentrated and where gaps exist.</p>
 
-  <!-- Matrix grid wrapper -->
-  <div class="matrix-grid-wrap">
-  <!-- Theme header -->
-  <div class="themes-header">
-    <div class="themes-header-label">Initiative</div>
-    <div class="theme-header-pill">
-      <div class="theme-header-dot" style="background:#ED193A;"></div>
-      <div class="theme-header-name">Consistency</div>
-    </div>
-    <div class="theme-header-pill">
-      <div class="theme-header-dot" style="background:#1e40af;"></div>
-      <div class="theme-header-name">Observability</div>
-    </div>
-    <div class="theme-header-pill">
-      <div class="theme-header-dot" style="background:#15803d;"></div>
-      <div class="theme-header-name">Connectivity</div>
-    </div>
-    <div class="theme-header-pill">
-      <div class="theme-header-dot" style="background:#92400e;"></div>
-      <div class="theme-header-name">Throughput</div>
-    </div>
-    <div class="theme-header-pill">
-      <div class="theme-header-dot" style="background:#7c3aed;"></div>
-      <div class="theme-header-name">Safety</div>
-    </div>
-    <div class="theme-header-pill">
-      <div class="theme-header-dot" style="background:#0369a1;"></div>
-      <div class="theme-header-name">Sustainability</div>
-    </div>
-  
-  <div id="matrixRows"></div>
-  </div><!-- /matrix-grid-wrap -->
+  <!-- Matrix table -->
+  <div class="matrix-table-wrap">
+    <table class="matrix-tbl">
+      <thead>
+        <tr>
+          <th class="mtbl-init">Initiative</th>
+          <th class="mtbl-theme"><div class="theme-header-pill"><div class="theme-header-dot" style="background:#ED193A;"></div><div class="theme-header-name">Consistency</div></div></th>
+          <th class="mtbl-theme"><div class="theme-header-pill"><div class="theme-header-dot" style="background:#1e40af;"></div><div class="theme-header-name">Observability</div></div></th>
+          <th class="mtbl-theme"><div class="theme-header-pill"><div class="theme-header-dot" style="background:#15803d;"></div><div class="theme-header-name">Connectivity</div></div></th>
+          <th class="mtbl-theme"><div class="theme-header-pill"><div class="theme-header-dot" style="background:#92400e;"></div><div class="theme-header-name">Throughput</div></div></th>
+          <th class="mtbl-theme"><div class="theme-header-pill"><div class="theme-header-dot" style="background:#7c3aed;"></div><div class="theme-header-name">Safety</div></div></th>
+          <th class="mtbl-theme"><div class="theme-header-pill"><div class="theme-header-dot" style="background:#0369a1;"></div><div class="theme-header-name">Sustainability</div></div></th>
+        </tr>
+      </thead>
+      <tbody id="matrixRows"></tbody>
+    </table>
+  </div>
 
   <!-- Pending requests injected by JS -->
-  <div id="matrixPendingGroup" style="display:none;" class="m-group">New Requests — Pending Approval</div>
-  <div id="matrixPendingRows"></div>
+  <div id="matrixPendingSection" style="display:none;" class="matrix-table-wrap" style="margin-top:1.5rem;">
+    <table class="matrix-tbl">
+      <tbody>
+        <tr class="m-group-row" id="matrixPendingGroup"><td colspan="7">New Requests — Pending Approval</td></tr>
+      </tbody>
+      <tbody id="matrixPendingRows"></tbody>
+    </table>
+  </div>
 
   <!-- Coverage summary -->
   <div class="themes-coverage" id="themesCoverage">
@@ -2081,32 +2061,31 @@ function renderMatrix() {
 
   matrixData.forEach((item, idx) => {
     if (item.group !== lastGroup) {
-      html += `<div class="m-group">${groups[item.group] || item.group}</div>`;
+      html += `<tr class="m-group-row"><td colspan="7">${groups[item.group] || item.group}</td></tr>`;
       lastGroup = item.group;
     }
     const cells = MATRIX_THEMES.map(t => {
       const active = item.themes.includes(t);
       if (isEdit) {
-        return `<div class="m-cell">
-          <div class="m-pip-toggle ${active ? MATRIX_PIP[t] + ' m-pip' : 'm-pip-empty'}"
-            onclick="toggleMatrixTheme(${idx},'${t}')"
+        return `<td style="text-align:center;vertical-align:middle;">
+          <div onclick="toggleMatrixTheme(${idx},'${t}')"
             title="${active ? 'Remove ' : 'Add '} ${t}"
-            style="cursor:pointer;width:20px;height:20px;border-radius:50%;display:flex;align-items:center;justify-content:center;transition:all .15s;${active ? '' : 'border:2px dashed rgba(0,0,0,.15);'}">
-            ${active ? '' : '<span style="font-size:9px;color:rgba(0,0,0,.2);">+</span>'}
+            style="cursor:pointer;width:20px;height:20px;border-radius:50%;display:inline-flex;align-items:center;justify-content:center;transition:all .15s;${active ? `background:var(--${t === 'consistency' ? 'red' : 'muted'});` : 'border:2px dashed rgba(0,0,0,.2);'}">
+            ${active ? `<div class="m-pip ${MATRIX_PIP[t]}" style="width:10px;height:10px;"></div>` : '<span style="font-size:9px;color:rgba(0,0,0,.25);">+</span>'}
           </div>
-        </div>`;
+        </td>`;
       }
-      return `<div class="m-cell">${active ? `<div class="m-pip ${MATRIX_PIP[t]}"></div>` : ''}</div>`;
+      return `<td style="text-align:center;vertical-align:middle;">${active ? `<div class="m-pip ${MATRIX_PIP[t]}" style="margin:auto;"></div>` : ''}</td>`;
     }).join('');
 
-    html += `<div class="m-row">
-      <div class="m-row-info">
+    html += `<tr>
+      <td class="mtbl-info">
         <div class="m-row-name">${item.name}</div>
         <div class="m-row-sub">${item.sub}</div>
         <div class="m-row-status"><span class="m-badge ${item.badge}">${item.badgeText}</span></div>
-      </div>
+      </td>
       ${cells}
-    </div>`;
+    </tr>`;
   });
 
   container.innerHTML = html;
@@ -2145,10 +2124,13 @@ function renderMatrixPending() {
   const pending = requestsData.filter(r => r.status === 'pending' || r.status === 'reviewing');
   if (!pending.length) {
     groupEl.style.display = 'none';
+    const sec = document.getElementById('matrixPendingSection');
+    if (sec) sec.style.display = 'none';
     container.innerHTML = '';
     return;
   }
   groupEl.style.display = '';
+  document.getElementById('matrixPendingSection').style.display = 'block';
 
   const THEME_COLS = ['consistency','observability','connectivity','throughput','safety','sustainability'];
   const PIP_CLASS  = { consistency:'mp-con', observability:'mp-obs', connectivity:'mp-link', throughput:'mp-thr', safety:'mp-saf', sustainability:'mp-sus' };
@@ -2156,16 +2138,16 @@ function renderMatrixPending() {
   container.innerHTML = pending.map(r => {
     const date = new Date(r.submittedAt).toLocaleDateString('en-US',{month:'short',day:'numeric'});
     const cells = THEME_COLS.map(t =>
-      `<div class="m-cell">${(r.themes||[]).includes(t) ? `<div class="m-pip ${PIP_CLASS[t]}" style="opacity:.5;"></div>` : ''}</div>`
+      `<td class="m-cell" style="text-align:center;">${(r.themes||[]).includes(t) ? `<div class="m-pip ${PIP_CLASS[t]}" style="opacity:.5;margin:auto;"></div>` : ''}</td>`
     ).join('');
-    return `<div class="m-row" style="opacity:.75;">
-      <div class="m-row-info">
+    return `<tr style="opacity:.75;">
+      <td class="mtbl-info">
         <div class="m-row-name">${r.title}</div>
         <div class="m-row-sub">${r.submitter||'Anonymous'} · submitted ${date}</div>
         <div class="m-row-status"><span class="m-badge mb-pending">● Pending Approval</span></div>
-      </div>
+      </td>
       ${cells}
-    </div>`;
+    </tr>`;
   }).join('');
 }
 
