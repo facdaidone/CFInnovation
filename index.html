@@ -598,6 +598,132 @@ body.edit-mode [contenteditable="true"]:not(:focus) {
   .themes-matrix-section { padding-left: 1.5rem; padding-right: 1.5rem; }
   .themes-header, .m-row { grid-template-columns: 160px repeat(6, 1fr); }
 }
+
+/* ── REQUEST DRAWER ── */
+#requestDrawer {
+  position: fixed;
+  top: 0; right: -520px;
+  width: 500px;
+  height: 100vh;
+  background: var(--bg2);
+  border-left: 1px solid var(--border);
+  box-shadow: -8px 0 40px rgba(0,0,0,.12);
+  z-index: 600;
+  display: flex;
+  flex-direction: column;
+  transition: right .3s cubic-bezier(.4,0,.2,1);
+  overflow: hidden;
+}
+#requestDrawer.open { right: 0; }
+#drawerOverlay {
+  position: fixed; inset: 0;
+  background: rgba(0,0,0,.25);
+  z-index: 599;
+  opacity: 0; pointer-events: none;
+  transition: opacity .3s;
+}
+#drawerOverlay.open { opacity: 1; pointer-events: all; }
+
+.drawer-header {
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1.25rem 1.5rem;
+  border-bottom: 1px solid var(--border);
+  background: var(--bg2);
+  flex-shrink: 0;
+}
+.drawer-header-left { display: flex; flex-direction: column; gap: 4px; }
+.drawer-eyebrow {
+  font-family: var(--mono); font-size: 9px; letter-spacing: .13em;
+  text-transform: uppercase; color: var(--red);
+}
+.drawer-title { font-size: 1.05rem; font-weight: 700; color: var(--text); line-height: 1.3; max-width: 360px; }
+.drawer-close {
+  width: 32px; height: 32px; border-radius: 6px; border: 1px solid var(--border2);
+  background: none; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  font-size: 1rem; color: var(--muted2); transition: all .15s; flex-shrink: 0;
+}
+.drawer-close:hover { background: var(--bg3); color: var(--text); }
+
+.drawer-body {
+  flex: 1; overflow-y: auto; padding: 1.5rem;
+  display: flex; flex-direction: column; gap: 1.25rem;
+}
+.drawer-field { display: flex; flex-direction: column; gap: 5px; }
+.drawer-label {
+  font-family: var(--mono); font-size: 8.5px; letter-spacing: .12em;
+  text-transform: uppercase; color: var(--muted);
+}
+.drawer-value {
+  font-size: .88rem; color: var(--muted2); line-height: 1.65;
+}
+.drawer-value.strong { color: var(--text); font-weight: 500; }
+.drawer-meta {
+  display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;
+  padding: 1rem; background: var(--bg3); border-radius: 6px;
+  border: 1px solid var(--border);
+}
+.drawer-themes { display: flex; flex-wrap: wrap; gap: .4rem; }
+.drawer-theme-chip {
+  display: inline-flex; align-items: center; gap: 5px;
+  padding: 3px 9px; border-radius: 10px; font-size: .75rem; font-weight: 500;
+  border: 1px solid var(--border2); background: var(--bg3); color: var(--muted2);
+  cursor: default; transition: all .15s;
+}
+.drawer-theme-chip.active { background: var(--red2); border-color: rgba(237,25,58,.2); color: var(--red); }
+.drawer-theme-chip.edit-mode-chip { cursor: pointer; }
+.drawer-theme-chip.edit-mode-chip:hover { border-color: var(--red); }
+.drawer-theme-dot { width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0; }
+
+.drawer-status-row {
+  display: flex; align-items: center; gap: .75rem;
+  padding: 1rem; background: var(--bg3); border-radius: 6px;
+  border: 1px solid var(--border);
+}
+.drawer-status-label { font-family: var(--mono); font-size: 8.5px; letter-spacing: .12em; text-transform: uppercase; color: var(--muted); min-width: 50px; }
+.drawer-status-select {
+  border: 1px solid var(--border2); border-radius: 5px;
+  padding: .45rem .8rem; font-size: .85rem; font-family: var(--sans);
+  background: var(--bg2); color: var(--text); outline: none; cursor: pointer;
+  flex: 1;
+}
+
+.drawer-footer {
+  padding: 1.25rem 1.5rem;
+  border-top: 1px solid var(--border);
+  background: var(--bg2);
+  display: flex; flex-direction: column; gap: .6rem;
+  flex-shrink: 0;
+}
+.drawer-approve-btn {
+  width: 100%; padding: .75rem; border: none; border-radius: 6px;
+  background: var(--green); color: #fff; font-size: .88rem; font-weight: 700;
+  font-family: var(--sans); cursor: pointer; transition: opacity .15s;
+  display: flex; align-items: center; justify-content: center; gap: 6px;
+}
+.drawer-approve-btn:hover { opacity: .88; }
+.drawer-approve-btn:disabled { opacity: .4; cursor: not-allowed; }
+.drawer-secondary-row { display: flex; gap: .5rem; }
+.drawer-save-btn {
+  flex: 1; padding: .6rem; border: 1px solid var(--border2); border-radius: 6px;
+  background: none; font-size: .82rem; font-weight: 600; font-family: var(--sans);
+  color: var(--muted2); cursor: pointer; transition: all .15s;
+}
+.drawer-save-btn:hover { background: var(--bg3); color: var(--text); }
+.drawer-delete-btn {
+  padding: .6rem 1rem; border: 1px solid rgba(237,25,58,.2); border-radius: 6px;
+  background: none; font-size: .82rem; font-weight: 600; font-family: var(--sans);
+  color: var(--red); cursor: pointer; transition: all .15s;
+}
+.drawer-delete-btn:hover { background: var(--red2); }
+.drawer-approved-note {
+  font-size: .78rem; color: var(--muted); text-align: center; font-family: var(--mono);
+  letter-spacing: .04em;
+}
+
+/* Make request rows clickable */
+.req-clickable { cursor: pointer; }
+.req-clickable:hover td { background: var(--red3) !important; }
+.matrix-tbl tr.req-clickable:hover { background: var(--red3); }
 </style>
 </head>
 <body>
@@ -1907,10 +2033,11 @@ function renderRequests() {
         <option value="declined" ${r.status==='declined'?'selected':''}>Declined</option>
       </select>` :
       `<span class="log-badge ${statusClass[r.status]||'lb-m'}">${statusMap[r.status]||r.status}</span>`;
+    const detailsBtn = `<button onclick="event.stopPropagation();openDrawer('${r.id}')" style="font-family:var(--mono);font-size:8px;letter-spacing:.08em;text-transform:uppercase;padding:3px 8px;border-radius:3px;border:1px solid rgba(30,64,175,.25);background:none;color:var(--blue);cursor:pointer;margin-right:4px;">Details</button>`;
     const delBtn = isEditor ?
-      `<button onclick="deleteRequest('${r.id}')" title="Delete" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:.8rem;padding:0 4px;">✕</button>` : '';
+      `<button onclick="event.stopPropagation();deleteRequest('${r.id}')" title="Delete" style="background:none;border:none;color:var(--red);cursor:pointer;font-size:.8rem;padding:0 4px;">✕</button>` : '';
     const date = new Date(r.submittedAt).toLocaleDateString('en-US',{month:'short',day:'numeric'});
-    return `<tr id="req-${r.id}">
+    return `<tr id="req-${r.id}" class="req-clickable" onclick="openDrawer('${r.id}')">
       <td style="font-size:.82rem;font-weight:600;color:var(--text);line-height:1.4;word-wrap:break-word;overflow-wrap:break-word;">
         ${r.title}
         ${r.desc ? `<div style="font-size:.78rem;font-weight:400;color:var(--muted2);margin-top:2px;line-height:1.5;">${r.desc}</div>` : ''}
@@ -1918,9 +2045,10 @@ function renderRequests() {
       <td style="white-space:nowrap;"><span class="req-priority ${priClass[r.priority]||'pri-medium'}">${r.priority}</span></td>
       <td>${themes || '<span style="color:var(--muted);font-size:.75rem;">—</span>'}</td>
       <td style="font-family:var(--mono);font-size:9px;color:var(--muted);white-space:nowrap;">${r.submitter||'Anonymous'}<br>${date}</td>
-      <td style="white-space:nowrap;">${statusSel}</td>
-      ${isEditor ? `<td>${delBtn}</td>` : ''}
+      <td style="white-space:nowrap;" onclick="event.stopPropagation();">${statusSel}</td>
+      ${isEditor ? `<td style="white-space:nowrap;">${detailsBtn}${delBtn}</td>` : ''}
     </tr>`;
+
   }).join('');
 
   const extraHeader = isEditor ? '<th style="width:40px;"></th>' : '';
@@ -2171,7 +2299,7 @@ function renderMatrixPending() {
       }
       return `<td style="text-align:center;vertical-align:middle;">${active ? `<div class="m-pip ${PIP_CLASS[t]}" style="margin:auto;"></div>` : ''}</td>`;
     }).join('');
-    return `<tr>
+    return `<tr class="req-clickable" onclick="openDrawer('${r.id}')">
       <td class="mtbl-info">
         <div class="m-row-name">${r.title}</div>
         <div class="m-row-sub">${r.submitter||'Anonymous'} · submitted ${date}</div>
@@ -2181,6 +2309,211 @@ function renderMatrixPending() {
     </tr>`;
   }).join('');
 }
+
+
+/* ── REQUEST DRAWER ── */
+const THEME_COLORS = {
+  consistency: '#ED193A', observability: '#1e40af', connectivity: '#15803d',
+  throughput: '#92400e', safety: '#7c3aed', sustainability: '#0369a1'
+};
+const THEME_NAMES = {
+  consistency: 'Consistency', observability: 'Observability', connectivity: 'Connectivity',
+  throughput: 'Throughput & Efficiency', safety: 'Safety & Well-Being', sustainability: 'Sustainability & Traceability'
+};
+
+let activeDrawerRequest = null;
+
+function openDrawer(requestId) {
+  const r = requestsData.find(x => x.id === requestId);
+  if (!r) return;
+  activeDrawerRequest = r;
+
+  // Populate fields
+  document.getElementById('drawerTitle').textContent = r.title;
+  document.getElementById('drawerDesc').textContent = r.desc || '—';
+
+  const benefitWrap = document.getElementById('drawerBenefitWrap');
+  if (r.benefit) {
+    document.getElementById('drawerBenefit').textContent = r.benefit;
+    benefitWrap.style.display = '';
+  } else {
+    benefitWrap.style.display = 'none';
+  }
+
+  document.getElementById('drawerSubmitter').textContent = r.submitter || 'Anonymous';
+  document.getElementById('drawerDate').textContent = new Date(r.submittedAt).toLocaleDateString('en-US', {month:'long',day:'numeric',year:'numeric'});
+  document.getElementById('drawerPriority').innerHTML = `<span class="req-priority pri-${r.priority}">${r.priority}</span>`;
+  document.getElementById('drawerEmail').textContent = r.email || '—';
+  document.getElementById('drawerStatusSelect').value = r.status || 'pending';
+
+  // Themes
+  renderDrawerThemes(r);
+
+  // Approve button state
+  const approveBtn = document.getElementById('drawerApproveBtn');
+  const approvedNote = document.getElementById('drawerApprovedNote');
+  if (r.status === 'approved') {
+    approveBtn.disabled = true;
+    approvedNote.style.display = 'block';
+  } else {
+    approveBtn.disabled = false;
+    approvedNote.style.display = 'none';
+  }
+
+  // Open
+  document.getElementById('requestDrawer').classList.add('open');
+  document.getElementById('drawerOverlay').classList.add('open');
+}
+
+function renderDrawerThemes(r) {
+  const container = document.getElementById('drawerThemes');
+  const themes = r.themes || [];
+  const allThemes = Object.keys(THEME_NAMES);
+  const isEdit = userRole === 'editor';
+
+  container.innerHTML = allThemes.map(t => {
+    const active = themes.includes(t);
+    return `<div class="drawer-theme-chip ${active ? 'active' : ''} ${isEdit ? 'edit-mode-chip' : ''}"
+      onclick="${isEdit ? `toggleDrawerTheme('${t}')` : ''}"
+      title="${isEdit ? (active ? 'Remove ' : 'Add ') + THEME_NAMES[t] : THEME_NAMES[t]}">
+      <div class="drawer-theme-dot" style="background:${THEME_COLORS[t]};${active ? '' : 'opacity:.3;'}"></div>
+      ${THEME_NAMES[t]}
+    </div>`;
+  }).join('');
+}
+
+function toggleDrawerTheme(theme) {
+  if (!activeDrawerRequest) return;
+  const r = activeDrawerRequest;
+  r.themes = r.themes || [];
+  const i = r.themes.indexOf(theme);
+  if (i > -1) r.themes.splice(i, 1);
+  else r.themes.push(theme);
+  renderDrawerThemes(r);
+}
+
+function drawerStatusChanged(status) {
+  if (!activeDrawerRequest) return;
+  activeDrawerRequest.status = status;
+  const approveBtn = document.getElementById('drawerApproveBtn');
+  const approvedNote = document.getElementById('drawerApprovedNote');
+  approveBtn.disabled = status === 'approved';
+  approvedNote.style.display = status === 'approved' ? 'block' : 'none';
+}
+
+async function saveDrawerChanges() {
+  if (!activeDrawerRequest) return;
+  const btn = document.querySelector('.drawer-save-btn');
+  btn.textContent = 'Saving…'; btn.disabled = true;
+
+  try {
+    const res = await fetch('/api/requests', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-session-token': sessionToken },
+      body: JSON.stringify({ action: 'updateRequest', id: activeDrawerRequest.id, data: activeDrawerRequest })
+    });
+    if (res.ok) {
+      const { queue } = await res.json();
+      requestsData = queue;
+      renderRequests();
+      updateReqBadge();
+      renderMatrixPending();
+      btn.textContent = 'Saved ✓';
+      setTimeout(() => { btn.textContent = 'Save Changes'; btn.disabled = false; }, 2000);
+    }
+  } catch(e) {
+    btn.textContent = 'Save Changes'; btn.disabled = false;
+  }
+}
+
+async function approveRequest() {
+  if (!activeDrawerRequest) return;
+  const btn = document.getElementById('drawerApproveBtn');
+  btn.textContent = 'Approving…'; btn.disabled = true;
+
+  activeDrawerRequest.status = 'approved';
+  document.getElementById('drawerStatusSelect').value = 'approved';
+
+  // Add to matrix as active workstream
+  const newRow = {
+    group: 'active',
+    name: activeDrawerRequest.title,
+    sub: `${activeDrawerRequest.submitter || 'CF Team'} · promoted from queue`,
+    badge: 'mb-research',
+    badgeText: '◐ New · Under Review',
+    themes: activeDrawerRequest.themes || []
+  };
+  matrixData.push(newRow);
+
+  try {
+    // Save request status
+    const res = await fetch('/api/requests', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-session-token': sessionToken },
+      body: JSON.stringify({ action: 'updateRequest', id: activeDrawerRequest.id, data: activeDrawerRequest })
+    });
+    if (res.ok) {
+      const { queue } = await res.json();
+      requestsData = queue;
+    }
+    // Save matrix data
+    const content = {};
+    EDITABLE_SELECTORS.forEach(sel => {
+      document.querySelectorAll(sel).forEach((el, i) => { content[sel+':'+i] = el.innerHTML; });
+    });
+    await fetch('/api/save', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-session-token': sessionToken },
+      body: JSON.stringify({ content: { ...content, 'matrix:data': JSON.stringify(matrixData) } })
+    });
+
+    renderMatrix();
+    renderRequests();
+    updateReqBadge();
+    renderMatrixPending();
+
+    btn.textContent = '✓ Approved';
+    document.getElementById('drawerApprovedNote').style.display = 'block';
+    // Auto-close after 1.5s
+    setTimeout(() => closeDrawer(), 1500);
+  } catch(e) {
+    btn.textContent = '✓ Approve & Add to Workstreams';
+    btn.disabled = false;
+  }
+}
+
+async function deleteDrawerRequest() {
+  if (!activeDrawerRequest) return;
+  if (!confirm(`Delete "${activeDrawerRequest.title}"? This cannot be undone.`)) return;
+
+  try {
+    const res = await fetch('/api/requests', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-session-token': sessionToken },
+      body: JSON.stringify({ action: 'delete', id: activeDrawerRequest.id })
+    });
+    if (res.ok) {
+      const { queue } = await res.json();
+      requestsData = queue;
+      renderRequests();
+      updateReqBadge();
+      renderMatrixPending();
+      closeDrawer();
+    }
+  } catch(e) { console.warn('Delete failed:', e); }
+}
+
+function closeDrawer() {
+  document.getElementById('requestDrawer').classList.remove('open');
+  document.getElementById('drawerOverlay').classList.remove('open');
+  activeDrawerRequest = null;
+}
+
+document.addEventListener('keydown', e => {
+  if (e.key === 'Escape' && document.getElementById('requestDrawer').classList.contains('open')) {
+    closeDrawer();
+  }
+});
 
 async function loadSavedContent() {
   try {
@@ -2273,5 +2606,79 @@ document.addEventListener('keydown', e => {
   <span class="edit-hint" id="editHint">Click any text to edit it</span>
   <button class="edit-btn" id="editBtn" onclick="toggleEditMode()">&#9999; Edit Content</button>
 </div>
+
+<!-- ── REQUEST DRAWER OVERLAY ── -->
+<div id="drawerOverlay" onclick="closeDrawer()"></div>
+
+<!-- ── REQUEST DRAWER ── -->
+<div id="requestDrawer">
+  <div class="drawer-header">
+    <div class="drawer-header-left">
+      <div class="drawer-eyebrow">New Request</div>
+      <div class="drawer-title" id="drawerTitle">—</div>
+    </div>
+    <button class="drawer-close" onclick="closeDrawer()">✕</button>
+  </div>
+
+  <div class="drawer-body">
+    <div class="drawer-field">
+      <div class="drawer-label">Description</div>
+      <div class="drawer-value" id="drawerDesc">—</div>
+    </div>
+
+    <div class="drawer-field" id="drawerBenefitWrap">
+      <div class="drawer-label">Expected Benefit</div>
+      <div class="drawer-value" id="drawerBenefit">—</div>
+    </div>
+
+    <div class="drawer-meta">
+      <div class="drawer-field">
+        <div class="drawer-label">Submitted By</div>
+        <div class="drawer-value strong" id="drawerSubmitter">—</div>
+      </div>
+      <div class="drawer-field">
+        <div class="drawer-label">Date</div>
+        <div class="drawer-value strong" id="drawerDate">—</div>
+      </div>
+      <div class="drawer-field">
+        <div class="drawer-label">Priority</div>
+        <div class="drawer-value" id="drawerPriority">—</div>
+      </div>
+      <div class="drawer-field">
+        <div class="drawer-label">Contact</div>
+        <div class="drawer-value" id="drawerEmail">—</div>
+      </div>
+    </div>
+
+    <div class="drawer-field">
+      <div class="drawer-label">Strategic Themes</div>
+      <div class="drawer-themes" id="drawerThemes"></div>
+    </div>
+
+    <div class="drawer-status-row">
+      <div class="drawer-status-label">Status</div>
+      <select class="drawer-status-select" id="drawerStatusSelect" onchange="drawerStatusChanged(this.value)">
+        <option value="pending">Pending</option>
+        <option value="reviewing">Reviewing</option>
+        <option value="approved">Approved</option>
+        <option value="declined">Declined</option>
+      </select>
+    </div>
+  </div>
+
+  <div class="drawer-footer">
+    <button class="drawer-approve-btn" id="drawerApproveBtn" onclick="approveRequest()">
+      ✓ Approve &amp; Add to Workstreams
+    </button>
+    <div class="drawer-secondary-row">
+      <button class="drawer-save-btn" onclick="saveDrawerChanges()">Save Changes</button>
+      <button class="drawer-delete-btn" onclick="deleteDrawerRequest()">Delete</button>
+    </div>
+    <div class="drawer-approved-note" id="drawerApprovedNote" style="display:none;">
+      This request has been approved and added to the matrix.
+    </div>
+  </div>
+</div>
+
 </body>
 </html>
