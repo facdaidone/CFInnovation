@@ -1,0 +1,588 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Pig Flow — Christensen Farms</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600&family=DM+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --green:   #1D9E75;
+    --amber:   #BA7517;
+    --red:     #C93F3E;
+    --blue:    #378ADD;
+    --purple:  #7F77DD;
+    --slate:   #888780;
+    --orange:  #D85A30;
+
+    --bg:      #F7F6F3;
+    --surface: #FFFFFF;
+    --border:  #E4E2DC;
+    --border2: #CCC9C0;
+    --text1:   #1A1916;
+    --text2:   #5A574F;
+    --text3:   #9A9790;
+
+    --font: 'DM Sans', sans-serif;
+    --mono: 'DM Mono', monospace;
+    --radius: 10px;
+    --shadow: 0 1px 3px rgba(0,0,0,0.07), 0 4px 12px rgba(0,0,0,0.05);
+  }
+
+  body {
+    font-family: var(--font);
+    background: var(--bg);
+    color: var(--text1);
+    min-height: 100vh;
+    padding: 0;
+  }
+
+  /* ── HEADER ── */
+  .page-header {
+    background: var(--surface);
+    border-bottom: 1px solid var(--border);
+    padding: 18px 28px;
+    display: flex;
+    align-items: center;
+    gap: 14px;
+  }
+  .cf-logo {
+    width: 36px; height: 36px;
+    background: var(--green);
+    border-radius: 8px;
+    display: flex; align-items: center; justify-content: center;
+  }
+  .cf-logo svg { display: block; }
+  .page-header-text h1 {
+    font-size: 15px; font-weight: 600; color: var(--text1); line-height: 1.2;
+  }
+  .page-header-text p {
+    font-size: 12px; color: var(--text3); font-family: var(--mono);
+  }
+
+  /* ── LAYOUT ── */
+  .main { max-width: 720px; margin: 0 auto; padding: 28px 20px 60px; }
+
+  .section-intro {
+    margin-bottom: 24px;
+  }
+  .section-intro h2 {
+    font-size: 20px; font-weight: 600; color: var(--text1); margin-bottom: 6px;
+  }
+  .section-intro p {
+    font-size: 13px; color: var(--text2); line-height: 1.6;
+  }
+
+  /* ── LEGEND ── */
+  .legend {
+    display: flex; gap: 18px; flex-wrap: wrap; margin-bottom: 20px;
+  }
+  .legend-item {
+    display: flex; align-items: center; gap: 7px;
+    font-size: 12px; color: var(--text2);
+  }
+  .l-dot {
+    width: 9px; height: 9px; border-radius: 50%;
+  }
+
+  /* ── STATS BAR ── */
+  .stats-bar {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(110px, 1fr));
+    gap: 10px;
+    margin-bottom: 28px;
+  }
+  .stat-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    padding: 12px 14px;
+  }
+  .stat-label { font-size: 11px; color: var(--text3); margin-bottom: 3px; font-family: var(--mono); }
+  .stat-value { font-size: 17px; font-weight: 600; color: var(--text1); }
+
+  /* ── STAGE CARDS ── */
+  .stages { display: flex; flex-direction: column; }
+
+  .arrow-sep {
+    display: flex; justify-content: center; padding: 3px 0;
+  }
+  .arrow-sep svg { display: block; }
+
+  .stage-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: var(--radius);
+    overflow: hidden;
+    box-shadow: var(--shadow);
+    transition: border-color 0.15s;
+  }
+  .stage-card.open { border-color: var(--border2); }
+
+  .stage-header {
+    display: flex; align-items: center; gap: 11px;
+    padding: 13px 16px;
+    cursor: pointer;
+    user-select: none;
+  }
+  .stage-header:hover { background: #FAFAF8; }
+
+  .risk-bar {
+    width: 3px; height: 28px; border-radius: 2px; flex-shrink: 0;
+  }
+  .rb-teal  { background: var(--green); }
+  .rb-amber { background: var(--amber); }
+  .rb-red   { background: var(--red); }
+
+  .stage-name { font-size: 14px; font-weight: 500; color: var(--text1); flex: 1; }
+  .stage-days {
+    font-size: 11px; color: var(--text3);
+    font-family: var(--mono); white-space: nowrap; margin-right: 6px;
+  }
+  .stage-mort {
+    font-size: 11px; font-weight: 500;
+    padding: 3px 8px; border-radius: 6px;
+    white-space: nowrap; margin-right: 4px;
+  }
+  .mort-teal  { background: #E8F7F2; color: #085041; }
+  .mort-amber { background: #FBF0DC; color: #633806; }
+  .mort-red   { background: #FCEAEA; color: #7A1F1F; }
+
+  .chevron {
+    width: 18px; height: 18px; display: flex; align-items: center; justify-content: center;
+    color: var(--text3); transition: transform 0.22s ease; flex-shrink: 0;
+  }
+  .stage-card.open .chevron { transform: rotate(180deg); }
+
+  /* ── DETAIL PANEL ── */
+  .stage-detail {
+    display: none;
+    padding: 0 16px 16px;
+    border-top: 1px solid var(--border);
+  }
+  .stage-card.open .stage-detail { display: block; }
+
+  .detail-desc {
+    font-size: 13px; color: var(--text2); line-height: 1.65;
+    padding: 12px 0 10px;
+  }
+
+  .section-label {
+    font-size: 10px; font-weight: 600; letter-spacing: 0.07em;
+    text-transform: uppercase; color: var(--text3);
+    font-family: var(--mono); margin: 12px 0 7px;
+  }
+
+  .risk-list {
+    padding-left: 16px; margin-bottom: 2px;
+  }
+  .risk-list li {
+    font-size: 12px; color: var(--text2); line-height: 1.75;
+  }
+
+  /* ── INNOVATION BADGES ── */
+  .inno-list {
+    display: flex; flex-wrap: wrap; gap: 6px; margin-top: 2px;
+  }
+  .inno-badge {
+    display: inline-flex; align-items: center; gap: 7px;
+    padding: 6px 11px; border-radius: 7px;
+    border: 1px solid var(--border);
+    background: var(--bg);
+    cursor: pointer;
+    transition: border-color 0.13s, background 0.13s;
+    font-size: 12px; color: var(--text1); font-weight: 400;
+  }
+  .inno-badge:hover { border-color: var(--border2); background: #F0EEE9; }
+  .inno-dot {
+    width: 7px; height: 7px; border-radius: 50%; flex-shrink: 0;
+  }
+  .inno-status-label {
+    font-size: 10px; color: var(--text3); font-family: var(--mono);
+  }
+  .no-inno {
+    font-size: 12px; color: var(--text3); font-style: italic; padding: 2px 0;
+  }
+
+  /* ── MODAL ── */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0;
+    background: rgba(20,18,14,0.4);
+    z-index: 200;
+    align-items: center; justify-content: center;
+    padding: 20px;
+    backdrop-filter: blur(2px);
+    animation: fadeIn 0.15s ease;
+  }
+  .modal-overlay.open { display: flex; }
+  @keyframes fadeIn { from { opacity:0 } to { opacity:1 } }
+
+  .modal {
+    background: var(--surface);
+    border: 1px solid var(--border2);
+    border-radius: 12px;
+    width: 100%; max-width: 480px;
+    max-height: 88vh; overflow-y: auto;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+    animation: slideUp 0.18s ease;
+  }
+  @keyframes slideUp { from { opacity:0; transform:translateY(10px) } to { opacity:1; transform:translateY(0) } }
+
+  .modal-top { height: 5px; border-radius: 12px 12px 0 0; }
+  .modal-body { padding: 20px 20px 24px; }
+
+  .modal-head {
+    display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 10px;
+  }
+  .modal-title { font-size: 16px; font-weight: 600; color: var(--text1); line-height: 1.3; }
+  .modal-close {
+    background: none; border: none; cursor: pointer;
+    font-size: 16px; color: var(--text3); padding: 2px; line-height: 1;
+    flex-shrink: 0; margin-top: 2px;
+  }
+  .modal-close:hover { color: var(--text1); }
+
+  .status-pill {
+    display: inline-flex; align-items: center; gap: 6px;
+    padding: 4px 10px; border-radius: 20px;
+    font-size: 11px; font-weight: 500; margin-bottom: 14px;
+  }
+  .pill-active  { background: #E8F7F2; color: #085041; }
+  .pill-pilot   { background: #E5F0FC; color: #1A4A7A; }
+  .pill-legal   { background: #EEEDF8; color: #3A337A; }
+  .pill-cost    { background: #FBF0DC; color: #633806; }
+  .pill-complete{ background: #F0EFEC; color: #4A4840; }
+  .pill-research{ background: #FAF0EB; color: #6A2A10; }
+  .pill-notviable{ background: #FCEAEA; color: #7A1F1F; }
+
+  .modal-desc {
+    font-size: 13px; color: var(--text2); line-height: 1.65; margin-bottom: 14px;
+  }
+  .modal-bullets { padding-left: 16px; margin-bottom: 4px; }
+  .modal-bullets li {
+    font-size: 13px; color: var(--text2); line-height: 1.75;
+  }
+  .modal-stages { display: flex; flex-wrap: wrap; gap: 6px; }
+  .stage-tag {
+    font-size: 11px; padding: 3px 9px; border-radius: 5px;
+    background: var(--bg); color: var(--text2);
+    border: 1px solid var(--border); font-family: var(--mono);
+  }
+
+  /* ── FOOTER NOTE ── */
+  .footer-note {
+    margin-top: 32px; padding: 14px 16px;
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: var(--radius);
+    font-size: 12px; color: var(--text3); line-height: 1.6;
+  }
+  .footer-note strong { color: var(--text2); }
+</style>
+</head>
+<body>
+
+<header class="page-header">
+  <div class="cf-logo">
+    <svg width="20" height="20" viewBox="0 0 20 20" fill="none">
+      <path d="M10 3 L16 7 L16 13 L10 17 L4 13 L4 7 Z" stroke="white" stroke-width="1.5" fill="none"/>
+      <circle cx="10" cy="10" r="2.5" fill="white"/>
+    </svg>
+  </div>
+  <div class="page-header-text">
+    <h1>Christensen Farms</h1>
+    <p>Pig Flow &amp; Innovation Tracker</p>
+  </div>
+</header>
+
+<main class="main">
+  <div class="section-intro">
+    <h2>Lifecycle Pig Flow</h2>
+    <p>Full pig lifecycle from insemination to market. Expand any stage to see mortality causes and the innovations actively working to address them.</p>
+  </div>
+
+  <div class="legend">
+    <div class="legend-item"><span class="l-dot" style="background:var(--green)"></span>Low mortality risk</div>
+    <div class="legend-item"><span class="l-dot" style="background:var(--amber)"></span>Moderate mortality risk</div>
+    <div class="legend-item"><span class="l-dot" style="background:var(--red)"></span>High mortality risk</div>
+  </div>
+
+  <div class="stats-bar">
+    <div class="stat-card"><div class="stat-label">Total cycle</div><div class="stat-value">~183 days</div></div>
+    <div class="stat-card"><div class="stat-label">Market weight</div><div class="stat-value">~280 lb</div></div>
+    <div class="stat-card"><div class="stat-label">Typical mortality</div><div class="stat-value">8–12%</div></div>
+    <div class="stat-card"><div class="stat-label">Active initiatives</div><div class="stat-value" id="active-count">—</div></div>
+  </div>
+
+  <div class="stages" id="stages"></div>
+
+  <div class="footer-note">
+    <strong>How to use:</strong> Click any stage to expand it and see mortality causes. Click an innovation badge to view its full detail card, status, and key updates.
+  </div>
+</main>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modal" onclick="handleOverlayClick(event)">
+  <div class="modal" id="modal-box">
+    <div class="modal-top" id="modal-top-bar"></div>
+    <div class="modal-body">
+      <div class="modal-head">
+        <div class="modal-title" id="modal-title"></div>
+        <button class="modal-close" onclick="closeModal()" aria-label="Close">✕</button>
+      </div>
+      <div id="modal-status"></div>
+      <div class="modal-desc" id="modal-desc"></div>
+      <div class="section-label">Key updates</div>
+      <ul class="modal-bullets" id="modal-bullets"></ul>
+      <div class="section-label" style="margin-top:16px">Addresses stages</div>
+      <div class="modal-stages" id="modal-stages"></div>
+    </div>
+  </div>
+</div>
+
+<script>
+// ── DATA ──────────────────────────────────────────────────────────────────
+
+const STATUS = {
+  active:     { label: 'Active · Adopted',             dotColor: '#1D9E75', pill: 'pill-active',   bar: '#1D9E75' },
+  pilot:      { label: 'Pilot Ready · Launching Soon', dotColor: '#378ADD', pill: 'pill-pilot',    bar: '#378ADD' },
+  legal:      { label: 'Agreement in Legal',           dotColor: '#7F77DD', pill: 'pill-legal',    bar: '#7F77DD' },
+  cost:       { label: 'Cost Model Phase',             dotColor: '#BA7517', pill: 'pill-cost',     bar: '#BA7517' },
+  complete:   { label: 'Complete',                     dotColor: '#888780', pill: 'pill-complete', bar: '#888780' },
+  research:   { label: 'Research Phase',               dotColor: '#D85A30', pill: 'pill-research', bar: '#D85A30' },
+  notviable:  { label: 'Evaluated · Not Viable',       dotColor: '#C93F3E', pill: 'pill-notviable',bar: '#C93F3E' },
+};
+
+const innovations = [
+  {
+    id: 'jotforms',
+    title: 'JotForms Digital Data Capture',
+    status: 'active',
+    desc: 'Offline-capable digital forms replacing paper vet logs across barn operations. Team trained and now self-sufficient.',
+    bullets: [
+      '160+ structured submissions captured to date',
+      'Team builds new forms independently — no ongoing Vation support needed',
+      'Form schema = Oracle/ERP integration spec; 160+ records = AI training corpus',
+    ],
+    stages: ['Farrowing', 'Pre-weaning', 'Nursery', 'Grow-finish'],
+  },
+  {
+    id: 'plaud',
+    title: 'Hands-Free AI (Plaud NotePin)',
+    status: 'pilot',
+    desc: 'Workers speak observations while in the field — audio is transcribed, translated, and parsed into structured output automatically.',
+    bullets: [
+      'Onsite POC validated Jan 2026 — strong potential confirmed',
+      '6–10 device pilot scoped; SOW complete; IP finalized, security cleared',
+      '13+ use cases identified; Plaud SDK launching May 12 for deeper integration',
+    ],
+    stages: ['Farrowing', 'Pre-weaning', 'Nursery', 'Grow-finish'],
+  },
+  {
+    id: 'aspra',
+    title: 'Air Filtration (ASPRA)',
+    status: 'cost',
+    desc: 'Electrostatic precipitation technology to reduce airborne pathogen transmission between barn facilities.',
+    bullets: [
+      'ASPRA onsite validation at CF completed March 2026 — initial results positive',
+      'Disease outbreak cost per site can reach hundreds of thousands in mortality + treatment',
+      '44+ farms in scope; full TCO model built with Phil and Sasha',
+    ],
+    stages: ['Weaning transition', 'Nursery', 'Grow-finish', 'Farrowing'],
+  },
+  {
+    id: 'zeitview',
+    title: 'Drone / LiDAR (Zeitview)',
+    status: 'legal',
+    desc: 'RGB + thermal drone scanning of all farm property to replace manual walk-around site assessments.',
+    bullets: [
+      '$2,500/site pricing independently validated before any commitment signed',
+      '400+ farm sites in scope — replaces expensive annual staff travel assessments',
+      'Zeitview operator agreement sent to CF legal April 1 — pilot ready to launch',
+    ],
+    stages: ['Gestation', 'Grow-finish'],
+  },
+  {
+    id: 'rfid',
+    title: 'RFID Tracking',
+    status: 'complete',
+    desc: 'Full vendor evaluation of RFID tracking solutions. Device configured and delivered to field team for validation.',
+    bullets: [
+      'RayFine and Honeywell both evaluated — best fit identified and configured',
+      'Android 13 compatibility issue resolved before any enterprise rollout',
+      'CF now manages vendor relationship directly — no Vation dependency for reorders',
+    ],
+    stages: ['Farrowing', 'Pre-weaning', 'Nursery', 'Grow-finish'],
+  },
+  {
+    id: 'realwear',
+    title: 'RealWear Wearable Devices',
+    status: 'notviable',
+    desc: 'Head-mounted display devices tested in real CF metal barn environments by Woody\'s team through December 2025.',
+    bullets: [
+      'RF interference from metal barn construction caused performance degradation — identified before procurement',
+      'Prevented a potentially large failed enterprise rollout; findings documented',
+      'Finding directly led to selecting Plaud NotePin, which passed the same conditions',
+    ],
+    stages: ['Farrowing', 'Nursery'],
+  },
+  {
+    id: 'robotics',
+    title: 'Robotics Research',
+    status: 'research',
+    desc: 'Market scan of robotics solutions applicable to hog farm operations. 10+ vendors screened; RoboForce identified as top candidate.',
+    bullets: [
+      '10+ solutions screened across agricultural robotics landscape',
+      'RoboForce profiled as highest-potential fit for CF operations',
+      'Positioned for activation once drone pilot cadence is established',
+    ],
+    stages: ['Nursery', 'Grow-finish'],
+  },
+];
+
+const stages = [
+  {
+    title: 'Breeding & insemination', days: 'Day 0', risk: 'teal', mortality: '1–2%',
+    desc: 'Sows are bred via AI or natural service. Conception rates are tracked closely — repeat services indicate issues with sow condition or semen quality.',
+    risks: ['Poor conception from heat stress or BCS issues', 'Gilt immaturity reducing farrowing rates', 'Semen quality failures'],
+    innovations: [],
+  },
+  {
+    title: 'Gestation', days: 'Days 0–114', risk: 'teal', mortality: '1–3%',
+    desc: 'Sows housed in gestation units. Fetal losses can occur in early gestation (days 1–35) or late. Nutrition and stress management are key.',
+    risks: ['Early embryonic death (days 1–35)', 'Abortions from PRRS, parvovirus, leptospirosis', 'Late-term mummies or stillbirths'],
+    innovations: ['zeitview'],
+  },
+  {
+    title: 'Farrowing', days: 'Days 114–121', risk: 'red', mortality: '10–15% of litter',
+    desc: 'The highest mortality window. Piglet losses from crushing, low birth weight, starvation, and chilling. Sow supervision critical 24–48 hrs post-farrowing.',
+    risks: ['Overlays / crushing by sow (most common)', 'Low birth weight / runts failing to thrive', 'Stillbirths and mummies', 'MMA reducing milk supply', 'Chilling in cold farrowing rooms'],
+    innovations: ['jotforms', 'plaud', 'rfid'],
+  },
+  {
+    title: 'Pre-weaning (lactation)', days: 'Days 1–21', risk: 'red', mortality: '5–10% of live-born',
+    desc: 'Piglets remain with sow for 3 weeks. Scours, crushing, and teat competition are the main killers. Split suckling and cross-fostering help balance litters.',
+    risks: ['E. coli scours (Days 1–4)', 'Rotavirus / TGE diarrhea', 'Streptococcal meningitis', 'Iron deficiency anemia', 'Small piglets losing access to teats'],
+    innovations: ['jotforms', 'plaud', 'rfid'],
+  },
+  {
+    title: 'Weaning transition', days: 'Days 21–28', risk: 'red', mortality: '2–5%',
+    desc: 'One of the most stressful events in the pig\'s life. Separation from sow, new environment, switch to solid feed. PMWS peaks here.',
+    risks: ['Post-weaning diarrhea (PWD) — E. coli', 'PCV2 / PMWS', 'Stress-induced immune suppression', 'Mixing litters spreading disease', 'Feed refusal / failure to thrive'],
+    innovations: ['aspra', 'jotforms', 'plaud'],
+  },
+  {
+    title: 'Nursery', days: 'Days 28–70', risk: 'amber', mortality: '1–3%',
+    desc: 'Pigs grow from ~13 lb to ~50 lb. Respiratory disease grows as a concern. All-in/all-out management and sanitation critical.',
+    risks: ['PRRS', 'Mycoplasma pneumonia', 'Actinobacillus pleuropneumoniae (App)', 'Influenza A / SIV', 'Rectal prolapse in crowded conditions'],
+    innovations: ['aspra', 'jotforms', 'plaud', 'rfid', 'robotics'],
+  },
+  {
+    title: 'Grow-finish', days: 'Days 70–160', risk: 'amber', mortality: '1–2%',
+    desc: 'Pigs grow from ~50 lb to market weight (~280 lb). Lameness, hernias, and late respiratory disease still occur. Feed conversion is the key metric.',
+    risks: ['Lameness / leg injuries', 'Inguinal / scrotal hernias', 'Late-stage pneumonia / pleuritis', 'Gastric ulcers from fine-ground feed', 'Tail biting leading to septicemia'],
+    innovations: ['aspra', 'jotforms', 'plaud', 'rfid', 'zeitview', 'robotics'],
+  },
+  {
+    title: 'Market / slaughter', days: '~Day 180–183', risk: 'teal', mortality: '< 0.5%',
+    desc: 'Pigs reach target market weight. Transport stress (PSE) and DOAs are the main concerns at this stage.',
+    risks: ['Transport stress / PSE (pale soft exudative pork)', 'Dead on arrival (DOA) from handling or mixing', 'Bruising from loading/unloading injuries'],
+    innovations: [],
+  },
+];
+
+// ── RENDER ────────────────────────────────────────────────────────────────
+
+const riskCls = { teal: 'rb-teal', amber: 'rb-amber', red: 'rb-red' };
+const mortCls = { teal: 'mort-teal', amber: 'mort-amber', red: 'mort-red' };
+const arrowSVG = `<svg width="22" height="18" viewBox="0 0 22 18" fill="none"><line x1="11" y1="0" x2="11" y2="12" stroke="#CCC9C0" stroke-width="1.5"/><polyline points="6,9 11,15 16,9" stroke="#CCC9C0" stroke-width="1.5" fill="none" stroke-linejoin="round"/></svg>`;
+
+let openIdx = null;
+
+function getInno(id) { return innovations.find(i => i.id === id); }
+
+function renderInnoBadge(id) {
+  const inn = getInno(id);
+  if (!inn) return '';
+  const s = STATUS[inn.status];
+  return `<button class="inno-badge" onclick="openModal('${id}', event)">
+    <span class="inno-dot" style="background:${s.dotColor}"></span>
+    <span>${inn.title}</span>
+    <span class="inno-status-label">${s.label}</span>
+  </button>`;
+}
+
+function render() {
+  const container = document.getElementById('stages');
+  container.innerHTML = stages.map((s, i) => `
+    ${i > 0 ? `<div class="arrow-sep">${arrowSVG}</div>` : ''}
+    <div class="stage-card${openIdx === i ? ' open' : ''}" id="stage-${i}">
+      <div class="stage-header" onclick="toggle(${i})" role="button" aria-expanded="${openIdx === i}">
+        <div class="risk-bar ${riskCls[s.risk]}"></div>
+        <div class="stage-name">${s.title}</div>
+        <div class="stage-days">${s.days}</div>
+        <div class="stage-mort ${mortCls[s.risk]}">${s.mortality}</div>
+        <div class="chevron">
+          <svg width="14" height="14" viewBox="0 0 14 14"><polyline points="2,4 7,10 12,4" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round"/></svg>
+        </div>
+      </div>
+      <div class="stage-detail">
+        <div class="detail-desc">${s.desc}</div>
+        <div class="section-label">Key mortality causes</div>
+        <ul class="risk-list">${s.risks.map(r => `<li>${r}</li>`).join('')}</ul>
+        <div class="section-label" style="margin-top:14px">Innovations addressing this stage</div>
+        ${s.innovations.length
+          ? `<div class="inno-list">${s.innovations.map(renderInnoBadge).join('')}</div>`
+          : `<div class="no-inno">No active innovations mapped to this stage yet.</div>`
+        }
+      </div>
+    </div>
+  `).join('');
+
+  const active = innovations.filter(i => i.status === 'active' || i.status === 'pilot').length;
+  document.getElementById('active-count').textContent = active + ' initiatives';
+}
+
+function toggle(i) {
+  openIdx = (openIdx === i) ? null : i;
+  render();
+}
+
+// ── MODAL ─────────────────────────────────────────────────────────────────
+
+function openModal(id, e) {
+  e.stopPropagation();
+  const inn = getInno(id);
+  const s = STATUS[inn.status];
+  document.getElementById('modal-top-bar').style.background = s.bar;
+  document.getElementById('modal-title').textContent = inn.title;
+  document.getElementById('modal-status').innerHTML =
+    `<div class="status-pill ${s.pill}">
+      <span class="inno-dot" style="background:${s.dotColor};width:7px;height:7px;border-radius:50%;display:inline-block"></span>
+      ${s.label}
+    </div>`;
+  document.getElementById('modal-desc').textContent = inn.desc;
+  document.getElementById('modal-bullets').innerHTML = inn.bullets.map(b => `<li>${b}</li>`).join('');
+  document.getElementById('modal-stages').innerHTML = inn.stages.map(st => `<span class="stage-tag">${st}</span>`).join('');
+  document.getElementById('modal').classList.add('open');
+  document.body.style.overflow = 'hidden';
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+  document.body.style.overflow = '';
+}
+
+function handleOverlayClick(e) {
+  if (e.target === document.getElementById('modal')) closeModal();
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+// ── INIT ──────────────────────────────────────────────────────────────────
+render();
+</script>
+</body>
+</html>
