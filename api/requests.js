@@ -32,10 +32,10 @@ export default async function handler(req, res) {
     return res.status(200).json({ queue });
   }
 
-  // POST - update queue (reorder, status change, delete) — editors only
+  // POST - update queue — editors only
   if (req.method === 'POST') {
     if (role !== 'editor') return res.status(401).json({ error: 'Editors only' });
-    const { action, id, queue: newQueue, status } = req.body;
+    const { action, id, queue: newQueue, status, themes } = req.body;
 
     const raw = await kvGet('requests:queue');
     let queue = raw ? (typeof raw === 'string' ? JSON.parse(raw) : raw) : [];
@@ -44,6 +44,8 @@ export default async function handler(req, res) {
       queue = newQueue;
     } else if (action === 'status' && id && status) {
       queue = queue.map(r => r.id === id ? { ...r, status } : r);
+    } else if (action === 'updateThemes' && id && themes) {
+      queue = queue.map(r => r.id === id ? { ...r, themes } : r);
     } else if (action === 'delete' && id) {
       queue = queue.filter(r => r.id !== id);
     }
